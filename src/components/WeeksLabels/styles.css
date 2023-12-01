@@ -1,0 +1,22 @@
+.trainerFrame-weeks {
+  flex: none;
+  min-width: calc(80em);
+  overflow-y: scroll;
+  padding: 0;
+}
+
+.week-days {
+  display: flex;
+}
+
+.week-label {
+  border-bottom: 1px solid var(--border-base);
+  color: var(--text-l1);
+  font-size: 0.875rem;
+  font-weight: 600;
+  max-width: 14.2857142857%;
+  padding: 2px 0;
+  text-align: center;
+  text-transform: uppercase;
+  width: 14.2857142857%;
+}

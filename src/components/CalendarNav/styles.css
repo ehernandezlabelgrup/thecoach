@@ -1,0 +1,7 @@
+.calendarNav.is-loading {
+  opacity: 0.25;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}

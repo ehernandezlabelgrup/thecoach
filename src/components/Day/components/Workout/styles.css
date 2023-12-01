@@ -1,0 +1,482 @@
+.workout {
+  border-color: transparent;
+  cursor: pointer;
+  display: flex;
+  flex: 1 0 auto;
+  flex-direction: column;
+  margin-top: 1px;
+  outline: none;
+  position: relative;
+  transition: border-color 0.1s ease-in-out;
+}
+
+.workout:nth-child(n + 3) {
+  border-top: 1px solid var(--border-base);
+}
+
+.workout:last-child {
+  margin-bottom: 1px;
+}
+
+.workout.is-feed {
+  margin-top: 0;
+}
+
+.workout.is-feed .workout-header {
+  padding: 0.75rem;
+}
+
+.workout.is-feed.is-active {
+  box-shadow: none;
+}
+
+.workout.is-feed:last-child {
+  border-radius: 0 0 4px 4px;
+}
+
+.workout.is-feed:last-child:before {
+  display: none;
+}
+
+.workout.is-truncate {
+  position: relative;
+}
+
+.workout.is-truncate .workout-cooldown-line:first-child,
+.workout.is-truncate .workout-title,
+.workout.is-truncate .workout-warmup-line:first-child {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  width: 100%;
+}
+
+.workout.is-truncate .workout-cooldown-line:not(:first-child),
+.workout.is-truncate .workout-warmup-line:not(:first-child) {
+  display: none;
+}
+
+.workout.is-truncate .workout-commentBody:nth-child(2) {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  width: 100%;
+}
+
+.workout.is-deleted,
+.workout.is-truncate .workout-commentBody:nth-child(n + 3) {
+  display: none;
+}
+
+.workout.is-active,
+.workout.is-selected {
+  box-shadow: 0 0 0 1px var(--border-blue-base);
+}
+
+.workout.is-selected,
+.workout.is-selected .workout-comment {
+  background-color: var(--bg-blue-l4);
+}
+
+.workout.is-dirty {
+  background-color: var(--bg-orange-l4);
+  box-shadow: 0 0 0 1px var(--border-orange-base);
+}
+
+.workout.is-dirty .workout-cooldown,
+.workout.is-dirty .workout-warmup {
+  border-color: var(--border-orange-l1);
+}
+
+.workout.is-large .workout-checkbox {
+  height: 1.25rem;
+  margin-right: 0.75rem;
+  width: 1.25rem;
+}
+
+.workout.is-large .workout-title {
+  line-height: 1.25;
+}
+
+.workout-header {
+  padding: 0.25rem 0.25rem 0.25rem 0.75rem;
+  position: relative;
+}
+
+.workout-contents {
+  display: flex;
+  flex: 1 0 auto;
+  flex-direction: column;
+}
+
+.workout-warmup {
+  border-bottom: 1px solid var(--border-base);
+  padding-bottom: 0.25rem !important;
+}
+
+.workout-cooldown {
+  border-top: 1px solid var(--border-base);
+  padding-top: 0.25rem;
+}
+
+.workout-cooldown,
+.workout-warmup {
+  color: var(--text-l1);
+  font-size: 0.65rem;
+  line-height: 1.2;
+}
+
+.workout-comment {
+  background-color: var(--bg-blue-l4);
+  flex: 1 0 auto;
+  margin-top: 0.25rem;
+  padding: 0.75rem;
+}
+
+.workout-commentName {
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.workout-commentDate {
+  color: var(--text-l2);
+  font-size: 0.75rem;
+}
+
+.workout-commentBody {
+  font-size: 0.75rem;
+  line-height: 1.3;
+}
+
+.workout-commentBody:last-child {
+  margin-bottom: 0;
+}
+
+.workout-title {
+  overflow-wrap: break-word;
+}
+
+.workout-program {
+  color: var(--text-l2);
+  font-size: 0.75rem;
+  line-height: 1;
+}
+
+.workout-checkbox {
+  align-items: center;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  border: 1px solid var(--border-base);
+  border-color: var(--border-d1);
+  border-radius: 3px;
+  color: #fff;
+  cursor: pointer;
+  display: flex;
+  height: 20px;
+  justify-content: center;
+  margin-right: 0.75rem;
+  outline: none;
+  transition: all 0.1s ease-in-out;
+  width: 20px;
+}
+
+.workout-checkbox:hover {
+  border-color: var(--border-d2);
+}
+
+.workout-checkbox:checked {
+  background-color: var(--bg-blue-base);
+  border-color: var(--border-blue-base);
+}
+
+.workout-checkbox:checked:before {
+  content: url("check.svg");
+  height: 0.75rem;
+  transform: translateY(-25%);
+  width: 0.75rem;
+}
+
+.dark .workout-checkbox,
+.dark .workout-checkbox:hover {
+  border-color: #5f5870;
+}
+
+.dark .workout-checkbox:checked {
+  border-color: var(--bg-blue-base);
+}
+
+.workout-copy,
+.workout-drag {
+  align-items: center;
+  display: flex;
+  font-size: 1.125rem;
+  justify-content: center;
+  padding: 0.25rem;
+}
+
+.workout-drag {
+  cursor: grab;
+}
+
+.workout-items {
+  flex: 1 0 auto;
+}
+
+.exercise {
+  margin: 0;
+  padding: 0.75rem;
+  transition: background-color 0.1s ease-in-out;
+}
+
+.exercise:hover {
+  background-color: var(--bg-base);
+}
+
+.exercise-content {
+  max-width: calc(100% - 17px);
+}
+.exercise-title {
+  word-wrap: break-word;
+  font-size: 90%;
+  font-weight: 400;
+  line-height: 1.2;
+}
+.exercise-desc,
+.exercise-results {
+  word-wrap: break-word;
+  line-height: 1.3;
+}
+.exercise-desc {
+  font-weight: 200;
+  font-size: 75%;
+}
+
+.add {
+  background-color: var(--bg-whiteElevated);
+  border: 1px solid #18161f;
+  flex: 1 0 auto;
+  outline: none;
+  position: relative;
+}
+
+.tag {
+  background-color: var(--tag);
+  border: 1px solid transparent;
+  border-radius: 9999px;
+  color: var(--text-base);
+  display: inline-block;
+  font-size: 0.75rem;
+  font-weight: 600;
+  line-height: 1.625;
+  padding: 0 0.5rem;
+}
+
+.tags {
+  display: inline-flex;
+  flex-wrap: wrap;
+}
+
+.tag--blue {
+  background-color: var(--bg-blue-l3);
+  color: var(--text-blue-base);
+}
+
+.tag--green {
+  background-color: var(--bg-green-base);
+  color: #fff;
+}
+
+.tag--orange {
+  background-color: var(--bg-orange-base);
+  color: #fff;
+}
+
+.tag--purpleGradient {
+  background: linear-gradient(253.19deg, #9e80f0, #090317);
+  border: 0;
+  color: #fff;
+}
+
+.tag--red {
+  background-color: var(--bg-red-base);
+  color: #fff;
+}
+
+.tag--blueOutline {
+  background-color: var(--tagOutline);
+  border-color: var(--bg-blue-l3);
+  color: var(--text-blue-base);
+}
+
+.tag--darkGray {
+  background-color: #5f5870;
+  color: #fff;
+}
+
+.tag--darkGray2 {
+  background-color: #9f9bad;
+  color: #fff;
+}
+
+.dark .tag--darkGray2 {
+  background-color: #453e55;
+  color: #fff;
+}
+
+.tag--remove {
+  align-items: center;
+  display: flex;
+  padding: 0;
+}
+
+.tag--remove .tag-label {
+  padding: 0 0.5rem;
+}
+
+.tag--remove .tag-remove {
+  background-color: inherit;
+  border-radius: 9999px;
+  font-weight: 600;
+  height: 1.25rem;
+  margin-left: -0.25rem;
+  padding: 0 0.25rem;
+  width: 1.25rem;
+}
+
+.tag--remove .tag-remove:active,
+.tag--remove .tag-remove:focus,
+.tag--remove .tag-remove:hover {
+  background-color: var(--bg-d3);
+  opacity: 1;
+  outline: none;
+}
+
+.tag--sm {
+  padding: 0 0.25rem;
+}
+
+.tag--lg {
+  font-size: 0.875rem;
+  padding-bottom: 2px;
+  padding-top: 2px;
+}
+
+.tag.is-highlighted {
+  background-color: var(--bg-blue-l3);
+  color: var(--text-base);
+}
+
+.tag.is-highlighted .tag-remove:active,
+.tag.is-highlighted .tag-remove:focus,
+.tag.is-highlighted .tag-remove:hover {
+  background-color: var(--bg-blue-l2);
+  opacity: 1;
+  outline: none;
+}
+
+.tag-icon {
+  display: inline-block;
+  padding-left: 0.5rem;
+  padding-right: -0.25rem;
+}
+
+.trackableTable {
+  align-items: start;
+  -moz-column-gap: 0.25rem;
+  column-gap: 0.25rem;
+  display: grid;
+  grid-template-columns: 1fr 120px auto;
+  row-gap: 0.25rem;
+}
+
+@media (any-pointer: coarse) {
+  .add-tag {
+    font-size: 14px !important;
+  }
+
+  .add-tag .add-icon {
+    position: relative;
+    top: 2px;
+  }
+}
+
+.add-tag > :first-child {
+  display: inline-block;
+}
+
+.pillar {
+  border-bottom: 1px solid var(--border-base);
+  border-top: 1px solid var(--border-base);
+  padding-bottom: 1.25rem;
+  padding-top: 1.25rem;
+}
+
+.pillar--dk {
+  border-color: #5f5870;
+}
+
+.pillar--lt {
+  border-color: var(--border-l1);
+}
+
+.pillar--list.pillar--b:last-child,
+.pillar--list.pillar--t:first-child {
+  border: none;
+}
+
+.pillar--xs,
+.pillar--xxs {
+  padding-bottom: 0.25rem;
+  padding-top: 0.25rem;
+}
+
+.pillar--sm {
+  padding-bottom: 0.5rem;
+  padding-top: 0.5rem;
+}
+
+.pillar--s {
+  padding-bottom: 0.75rem;
+  padding-top: 0.75rem;
+}
+
+.pillar--m {
+  padding-bottom: 1rem;
+  padding-top: 1rem;
+}
+
+.pillar--mm {
+  padding-bottom: 1.5rem;
+  padding-top: 1.5rem;
+}
+
+.pillar--ml {
+  padding-bottom: 2rem;
+  padding-top: 2rem;
+}
+
+.pillar--l {
+  padding-bottom: 2.5rem;
+  padding-top: 2.5rem;
+}
+
+.pillar--xl {
+  padding-bottom: 5rem;
+  padding-top: 5rem;
+}
+
+.pillar--b {
+  border-top: none;
+  padding-top: 0;
+}
+
+.pillar--t {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.pillar--f {
+  padding-bottom: 0;
+  padding-top: 0;
+}
