@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "@lit/react": "^1.0.2",
+    "@r2wc/react-to-web-component": "^2.0.3",
     "dayjs": "^1.11.10",
     "lit": "^3.1.0",
     "pikaday": "^1.8.2",
