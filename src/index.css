@@ -1239,7 +1239,6 @@ textarea {
   font-size: 1rem;
   line-height: normal;
   min-width: 3.125rem;
-  padding: 0.75rem;
   transition: all 0.1s ease-in-out;
   width: 100%;
 }

@@ -1,25 +1,23 @@
-import { useState } from "react"
-import { Exercise } from "../../../../../../interfaces/workout"
-import { MentionsInput, Mention } from "react-mentions"
-
-import ExercisesItems from "../ExercisesItems"
+import { useRef, useState } from "react";
+import { Exercise } from "../../../../../../interfaces/workout";
+import { MentionsInput, Mention } from "react-mentions";
+import axios from "axios";
+import ExercisesItems from "../ExercisesItems";
 
 const EXERCISES_EXAMPLES = [
   {
     id: 46,
     display: "Jump Squat",
     name: "Jump Squat",
-    "video": "https://dycqnxcaay2f4.cloudfront.net/v_246-transcoded.mp4",
-
+    video: "https://dycqnxcaay2f4.cloudfront.net/v_246-transcoded.mp4",
   },
   {
     id: 111,
     display: "Downward Dog Stretch",
     name: "Downward Dog Stretch",
-    "video": "https://dycqnxcaay2f4.cloudfront.net/v_246-transcoded.mp4",
-
+    video: "https://dycqnxcaay2f4.cloudfront.net/v_246-transcoded.mp4",
   },
-]
+];
 
 interface Props {
   data: Exercise[];
@@ -27,39 +25,71 @@ interface Props {
 }
 
 const WorkoutExercise = ({ data, onChange }: Props) => {
-  const [exercises, setExercises] = useState<Exercise[]>(data)
-  const [value, setValue] = useState("")
+  const [exercises, setExercises] = useState<Exercise[]>(data || []);
+  const [value, setValue] = useState("");
+  const timer = useRef(null);
+
+  const getData = (query: string, callback) => {
+    if (!query) return callback([]);
+    if (timer.current) {
+      clearTimeout(timer.current);
+    }
+
+    timer.current = setTimeout(() => {
+      axios
+        .get(
+          "https://pre.thetraktor.app/module/thetraktor/getallexercises?per_page=40&name=" +
+            value
+        )
+        .then((response) => {
+          if (response.status === 200) {
+            console.log(query);
+            callback(
+              response?.data?.psdata?.map((item) => {
+                return {
+                  id: item.id,
+                  display: item.name,
+                  name: item.name,
+                  video: item.video,
+                };
+              })
+            );
+          }
+          return response.data;
+        });
+    }, 500);
+  };
+
   const deleteExercise = (id: number) => {
     const newData = exercises.filter(
       (exercise: Exercise) => exercise.id !== id
-    )
-    onChange(newData)
-    setExercises(newData)
-  }
+    );
+    onChange(newData);
+    setExercises(newData);
+  };
   const addExercise = (id: number) => {
     const exists = EXERCISES_EXAMPLES.find(
       (exercise: Exercise) => exercise.id === id
-    ) as Exercise
+    ) as Exercise;
 
     const existsInExercises = exercises.find(
       (exercise: Exercise) => exercise.id === id
-    ) as Exercise
+    ) as Exercise;
 
     if (existsInExercises) {
-      return
+      return;
     }
 
     const newExercise = {
       ...exists,
       display: exists.display,
-    }
-    const newData = [...exercises, newExercise]
-    onChange(newData)
-    setExercises(newData)
-    setValue("")
-  }
+    };
+    const newData = [...exercises, newExercise];
+    onChange(newData);
+    setExercises(newData);
+    setValue("");
+  };
 
-  console.log(exercises)
   return (
     <>
       <div id="ember760" className="prnt-hide ember-view">
@@ -100,8 +130,11 @@ const WorkoutExercise = ({ data, onChange }: Props) => {
             >
               <Mention
                 trigger=""
-                data={EXERCISES_EXAMPLES}
-                onAdd={(id) => addExercise(Number(id))}
+                data={getData}
+                onAdd={(id) => {
+                  addExercise(Number(id));
+                  setValue("");
+                }}
               />
             </MentionsInput>
           </div>
@@ -131,13 +164,10 @@ const WorkoutExercise = ({ data, onChange }: Props) => {
             </div>
           </div>
         </div>
-              <ExercisesItems 
-                data={exercises}
-                onDeleteExercise={deleteExercise}
-              />
+        <ExercisesItems data={exercises} onDeleteExercise={deleteExercise} />
       </div>
     </>
-  )
-}
+  );
+};
 
-export default WorkoutExercise
+export default WorkoutExercise;
