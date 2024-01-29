@@ -19,6 +19,7 @@
     "lit": "^3.1.0",
     "pikaday": "^1.8.2",
     "react": "^18.2.0",
+    "react-beautiful-dnd": "^13.1.1",
     "react-dom": "^18.2.0",
     "react-hook-form": "^7.48.2",
     "react-mentions": "^4.4.10",
@@ -28,6 +29,7 @@
   "devDependencies": {
     "@types/pikaday": "^1.7.9",
     "@types/react": "^18.2.37",
+    "@types/react-beautiful-dnd": "^13.1.8",
     "@types/react-dom": "^18.2.15",
     "@types/react-mentions": "^4.1.13",
     "@typescript-eslint/eslint-plugin": "^6.10.0",

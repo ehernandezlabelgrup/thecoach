@@ -64,7 +64,7 @@ IWorkoutItem[] | undefined
     setValue("workout_items", newWorkoutItems)
   }
 
-console.log(errors)
+
   return (
     <div className="add is-editing is-small" data-test="workout-day">
       <div
@@ -110,7 +110,7 @@ console.log(errors)
         </div>
         <WorkoutExercise onChange={onChangeExercise} data={data?.exercises} />
       </div>
-      <div className="workouts-items bg-gray-100 relative">
+      <div className="workouts-items bg-gray-50 relative">
         {workoutItems?.map((item, index) => (
           <div 
           key={index}
@@ -186,6 +186,23 @@ console.log(errors)
               style={{ height: "36px" }}
             />
           </div>
+        </div>
+      </div>
+      <div
+        id="ember248"
+        className="pillar pillar--t row row--o row--m prnt-cooldownWrap mb-3 ember-view"
+      >
+        <div className="split prnt-cooldown" data-print="notes">
+            <textarea
+              {...register("notes")}
+              spellCheck="false"
+              placeholder="Notas sesión"
+              id="ember249"
+              className="ember-text-area ember-view addInput addInput--base addInput--textarea autoExpand"
+              aria-label="Notas sesión"
+              data-test="type-textarea"
+              style={{ height: "36px" }}
+            />
         </div>
       </div>
       <div className="row row--o pillar pillar--t pr-0 mt-3 prnt-hide pb-4 pillar--s row--s">

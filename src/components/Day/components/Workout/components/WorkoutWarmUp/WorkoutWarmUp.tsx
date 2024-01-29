@@ -13,7 +13,6 @@ const WorkoutWarmUp = ({ warmup = "" }: Props) => {
    * Se realiza un split para separar cada linea del calentamiento
    */
   const split = useMemo(() => {
-    console.log(warmup);
     if (warmup) {
       return warmup?.split("\n");
     } else {

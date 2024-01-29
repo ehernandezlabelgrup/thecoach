@@ -2,10 +2,11 @@ import { ICategories, ITypesMark, IWorkout } from "../../../../interfaces/workou
 import WorkoutHeader from "./components/WorkoutHeader"
 import WorkoutItems from "./components/WorkoutItems"
 import WorkoutWarmUp from "./components/WorkoutWarmUp"
-import WorkoutCooldown from "./components/WorktoutCooldown"
 import "./styles.css"
 import WorkoutAddEditing from "./components/WorkoutAddEditing"
 import ExercisesItems from "./components/ExercisesItems"
+import WorktoutTextSplit from "./components/WorktoutTextSplit"
+import { Draggable } from "react-beautiful-dnd";
 
 interface Props {
   data: IWorkout;
@@ -17,6 +18,7 @@ interface Props {
   typesMark: ITypesMark;
   categories: ICategories;
   onDelete: () => void;
+  index: number;
 
 }
 
@@ -29,8 +31,15 @@ const Workout = ({
   truncate,
   typesMark,
   categories,
-  onDelete
+  onDelete,
+  index,
+  onCoyWorkout,
+  selected,
+  onSelect
 }: Props) => {
+
+
+
   if (isEditing)
     return (
       <WorkoutAddEditing 
@@ -40,18 +49,29 @@ const Workout = ({
       onDelete={onDelete}
       />
     )
-
   return (
+    <Draggable draggableId={`${data?.id.toString()}`} index={index}>
+   {(provided) => (
+        <div
+        className="bg-white"
+          ref={provided.innerRef}
+          {...provided.draggableProps}
+        >
     <div
-      onClick={onClick}
+      onDoubleClick={onClick}
       className={`workout ${
         truncate && "is-truncate"
       } is-active is-small has-workoutControls`}
     >
-      <WorkoutHeader title={data.title} />
+      <WorkoutHeader 
+      selected={selected}
+      onSelect={() => onSelect(data?.id)}
+      onCoyWorkout={()=> onCoyWorkout(data?.id)}
+      provided={provided}
+      title={data.title} />
       <div className="law workout-contents">
         <div className="row row--s">
-          <WorkoutWarmUp warmup={data?.warmup} />
+          {data?.warmup && <WorkoutWarmUp warmup={data?.warmup} />}
           {!truncate && <ExercisesItems data={data?.exercises} />}
         </div>
         <div
@@ -59,14 +79,25 @@ const Workout = ({
           className="workout-items sortable-objects ember-view"
         >
           {data?.workout_items?.map((item, index) => (
-            <WorkoutItems index={index} key={index} data={item} />
+            <>
+            <WorkoutItems 
+            categories={categories}
+            index={index} key={index} data={item} />
+             {!truncate && <div className="px-2"><ExercisesItems data={item?.exercises} /></div>}
+            </>
           ))}
-          <div className="row row--s">
-            <WorkoutCooldown cooldown={data?.cooldown} />
-          </div>
+          {data?.cooldown && <div className="row row--s">
+            <WorktoutTextSplit text={data?.cooldown} />
+          </div>}
+         {data?.notes &&  <div className="row row--s">
+            <WorktoutTextSplit text={data?.notes} />
+          </div>}
         </div>
       </div>
     </div>
+    </div>
+    )}
+    </Draggable>
   )
 }
 

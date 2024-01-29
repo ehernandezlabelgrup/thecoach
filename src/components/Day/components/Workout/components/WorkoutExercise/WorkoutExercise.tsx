@@ -4,21 +4,6 @@ import { MentionsInput, Mention } from "react-mentions";
 import axios from "axios";
 import ExercisesItems from "../ExercisesItems";
 
-const EXERCISES_EXAMPLES = [
-  {
-    id: 46,
-    display: "Jump Squat",
-    name: "Jump Squat",
-    video: "https://dycqnxcaay2f4.cloudfront.net/v_246-transcoded.mp4",
-  },
-  {
-    id: 111,
-    display: "Downward Dog Stretch",
-    name: "Downward Dog Stretch",
-    video: "https://dycqnxcaay2f4.cloudfront.net/v_246-transcoded.mp4",
-  },
-];
-
 interface Props {
   data: Exercise[];
   onChange: (exercises: Exercise[]) => void;
@@ -39,11 +24,10 @@ const WorkoutExercise = ({ data, onChange }: Props) => {
       axios
         .get(
           "https://pre.thetraktor.app/module/thetraktor/getallexercises?per_page=40&name=" +
-            value
+          value
         )
         .then((response) => {
           if (response.status === 200) {
-            console.log(query);
             callback(
               response?.data?.psdata?.map((item) => {
                 return {
@@ -67,10 +51,9 @@ const WorkoutExercise = ({ data, onChange }: Props) => {
     onChange(newData);
     setExercises(newData);
   };
-  const addExercise = (id: number) => {
-    const exists = EXERCISES_EXAMPLES.find(
-      (exercise: Exercise) => exercise.id === id
-    ) as Exercise;
+  const addExercise = (id: number, display, d) => {
+
+
 
     const existsInExercises = exercises.find(
       (exercise: Exercise) => exercise.id === id
@@ -81,8 +64,8 @@ const WorkoutExercise = ({ data, onChange }: Props) => {
     }
 
     const newExercise = {
-      ...exists,
-      display: exists.display,
+      id,
+      name: display,
     };
     const newData = [...exercises, newExercise];
     onChange(newData);
@@ -125,14 +108,14 @@ const WorkoutExercise = ({ data, onChange }: Props) => {
                   },
                 },
               }}
-              placeholder={"Add exercises"}
+              placeholder={"Añadir ejercicio"}
               a11ySuggestionsListLabel={"Suggested mentions"}
             >
               <Mention
                 trigger=""
                 data={getData}
-                onAdd={(id) => {
-                  addExercise(Number(id));
+                onAdd={(id, display) => {
+                  addExercise(Number(id), display);
                   setValue("");
                 }}
               />

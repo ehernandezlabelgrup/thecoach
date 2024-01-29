@@ -31,7 +31,14 @@ const Week = ({
   typesMark,
   categories,
   createRestDay,
-  onDeleteWorkout
+  onDeleteWorkout,
+  onUploadAudio,
+  audios,
+  onDeleteAudio,
+  onCoyWorkout,
+  onSelect,
+  selecteds,
+  pasteWorkout
 }: Props) => {
 
   return (
@@ -44,6 +51,9 @@ const Week = ({
             loading={false}
             key={index}
             day={day}
+            onCoyWorkout={onCoyWorkout}
+            audios={audios}
+            onDeleteAudio={onDeleteAudio}
             isEditing={isEditing}
             setIsEditing={onEditing}
             onCreateWorkout={onCreateWorkout}
@@ -52,6 +62,10 @@ const Week = ({
             categories={categories}
             createRestDay={createRestDay}
             onDeleteWorkout={onDeleteWorkout}
+            onUploadAudio={onUploadAudio}
+            onSelect={onSelect}
+            selecteds={selecteds}
+            pasteWorkout={pasteWorkout}
           />
         ))}
       </div>

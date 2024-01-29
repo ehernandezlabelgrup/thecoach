@@ -1,6 +1,7 @@
-import { useState } from "react"
+import { useMemo, useState } from "react"
 import { createLetterFromNumber } from "../../../../../../../../utils/calendar"
 import { TESelect } from "tw-elements-react"
+import WorkoutExercise from "../../../WorkoutExercise"
 
 const EditWorkoutItem = ({
   register,
@@ -11,8 +12,15 @@ const EditWorkoutItem = ({
   setValue,
   errors
 }) => {
+
+  const [is_rank, setIsRank] = useState(getValues(`workout_items.${index}.is_ranking`) || false)
   const letter = createLetterFromNumber(index)
   const [focustTitle, setFocusTitle] = useState(false)
+
+
+  const onChangeExercise = (values) => {
+    setValue(`workout_items.${index}.exercises`, values)
+  }
 
   const category_options = categories?.map((item) => ({
     value: item.id_thetraktor_workout_category,
@@ -23,25 +31,57 @@ const EditWorkoutItem = ({
     value: item.id_thetraktor_type_mark,
     text: item.name,
   }))
-  
 
+const exercises = useMemo(() => {
+    return getValues(`workout_items.${index}.exercises`)
+}, [])
   return (
     <div className="">
       <div className="px-4 pt-4 flex gap-1 flex-row">
-        <TESelect
-        
-          className="flex-1"
-          name={`workout_items.${index}.id_thetraktor_type_mark`}
-          onValueChange={value => {
-            setValue(`workout_items.${index}.id_thetraktor_type_mark`, value?.value)
-          }}
-          defaultValue={0}
-          data={types_mark}
-          size="sm"
-          clearBtn
-          preventFirstSelection
-          label="Marca"
+        <div className="flex gap-1">
+        <label
+        htmlFor={`rank.${index}`}
+        className="flex flex-row relative">
+        <div className={`${is_rank ? 'bg-blue-300' : 'bg-gray-300'} cursor-pointer flex items-center justify-center w-6 h-6 rounded`}>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 24 24"
+                   
+                    className={`w-3 h-3 ${is_rank ? 'fill-blue-600' : 'fill-gray-600'}`}
+                  >
+                    <path
+                      fillRule="evenodd"
+                      d="M5.166 2.621v.858c-1.035.148-2.059.33-3.071.543a.75.75 0 0 0-.584.859 6.753 6.753 0 0 0 6.138 5.6 6.73 6.73 0 0 0 2.743 1.346A6.707 6.707 0 0 1 9.279 15H8.54c-1.036 0-1.875.84-1.875 1.875V19.5h-.75a2.25 2.25 0 0 0-2.25 2.25c0 .414.336.75.75.75h15a.75.75 0 0 0 .75-.75 2.25 2.25 0 0 0-2.25-2.25h-.75v-2.625c0-1.036-.84-1.875-1.875-1.875h-.739a6.706 6.706 0 0 1-1.112-3.173 6.73 6.73 0 0 0 2.743-1.347 6.753 6.753 0 0 0 6.139-5.6.75.75 0 0 0-.585-.858 47.077 47.077 0 0 0-3.07-.543V2.62a.75.75 0 0 0-.658-.744 49.22 49.22 0 0 0-6.093-.377c-2.063 0-4.096.128-6.093.377a.75.75 0 0 0-.657.744Zm0 2.629c0 1.196.312 2.32.857 3.294A5.266 5.266 0 0 1 3.16 5.337a45.6 45.6 0 0 1 2.006-.343v.256Zm13.5 0v-.256c.674.1 1.343.214 2.006.343a5.265 5.265 0 0 1-2.863 3.207 6.72 6.72 0 0 0 .857-3.294Z"
+                      clipRule="evenodd"
+                    />
+                  </svg>
+                </div>
+                <input
+          {...register(`workout_items.${index}.is_ranking`)}
+          className="abolute hidden"
+          type="checkbox"
+          onChange={(e) => {
+            setIsRank(e.target.checked)
+            setValue(`workout_items.${index}.is_ranking`, e.target.checked)
+
+          }
+          }
+          id={`rank.${index}`}
         />
+        </label>
+          <select
+            {...register(`workout_items.${index}.id_thetraktor_type_mark`)}
+            className="w-24 text-left h-full uppercase outline-none px-2 font-semibold text-xs border border-gray-300  focus:bg-blue-50 bg-white rounded py-1"
+          >
+                        <option value={0}>Sin marca</option>
+
+            {
+              types_mark.map((item) => (
+                <option value={item.value}>{item.text}</option>
+              ))
+            }
+          </select>
+    
         <div className="w-24">
           <input
             {...register(`workout_items.${index}.min_result`)}
@@ -50,31 +90,28 @@ const EditWorkoutItem = ({
             className="w-full h-full uppercase outline-none px-2 font-semibold text-xs border border-gray-300 text-right focus:bg-blue-50 bg-white rounded py-1"
           />
         </div>
+        </div>
       </div>
       <div className="px-4 pt-1">
-        <TESelect
-          {...register(`workout_items.${index}.id_workout_category`)}
-          data={category_options}
-          size="sm"
-          clearBtn
-          preventFirstSelection
-          label="Categoría"
-        />
+
+      <select
+            {...register(`workout_items.${index}.id_workout_category`)}
+            className="w-full text-left h-full uppercase outline-none px-2 font-semibold text-xs border border-gray-300  focus:bg-blue-50 bg-white rounded py-1"
+          >
+                        <option value={0}>Sin categoría</option>
+
+            {
+              category_options.map((item) => (
+                <option value={item.value}>{item.text}</option>
+              ))
+            }
+          </select>
+
       </div>
       <div className="px-4">
-        <input
-          {...register(`workout_items.${index}.is_ranking`)}
-          className="mr-2 mt-[0.3rem] h-3.5 w-8 appearance-none rounded-[0.4375rem] bg-neutral-300 before:pointer-events-none before:absolute before:h-3.5 before:w-3.5 before:rounded-full before:bg-transparent before:content-[''] after:absolute after:z-[2] after:-mt-[0.1875rem] after:h-5 after:w-5 after:rounded-full after:border-none after:bg-neutral-100 after:shadow-[0_0px_3px_0_rgb(0_0_0_/_7%),_0_2px_2px_0_rgb(0_0_0_/_4%)] after:transition-[background-color_0.2s,transform_0.2s] after:content-[''] checked:bg-primary checked:after:absolute checked:after:z-[2] checked:after:-mt-[3px] checked:after:ml-[1.0625rem] checked:after:h-5 checked:after:w-5 checked:after:rounded-full checked:after:border-none checked:after:bg-primary checked:after:shadow-[0_3px_1px_-2px_rgba(0,0,0,0.2),_0_2px_2px_0_rgba(0,0,0,0.14),_0_1px_5px_0_rgba(0,0,0,0.12)] checked:after:transition-[background-color_0.2s,transform_0.2s] checked:after:content-[''] hover:cursor-pointer focus:outline-none focus:ring-0 focus:before:scale-100 focus:before:opacity-[0.12] focus:before:shadow-[3px_-1px_0px_13px_rgba(0,0,0,0.6)] focus:before:transition-[box-shadow_0.2s,transform_0.2s] focus:after:absolute focus:after:z-[1] focus:after:block focus:after:h-5 focus:after:w-5 focus:after:rounded-full focus:after:content-[''] checked:focus:border-primary checked:focus:bg-primary checked:focus:before:ml-[1.0625rem] checked:focus:before:scale-100 checked:focus:before:shadow-[3px_-1px_0px_13px_#3b71ca] checked:focus:before:transition-[box-shadow_0.2s,transform_0.2s] dark:bg-neutral-600 dark:after:bg-neutral-400 dark:checked:bg-primary dark:checked:after:bg-primary dark:focus:before:shadow-[3px_-1px_0px_13px_rgba(255,255,255,0.4)] dark:checked:focus:before:shadow-[3px_-1px_0px_13px_#3b71ca]"
-          type="checkbox"
-          role="switch"
-          id="rank"
-        />
-        <label
-          className="inline-block pl-[0.15rem] hover:cursor-pointer"
-          htmlFor="rank"
-        >
-          Ranking
-        </label>
+
+       
+      
       </div>
 
       <div>
@@ -111,6 +148,9 @@ const EditWorkoutItem = ({
             className="px-4 italic py-2 rounded-none outline-none bg-transparent border-gray-100 focus:border-t focus:border-b focus:border-blue-500 text-xs h-28 resize-none "
             placeholder="Notas del ejercicio (opcional)"
           />
+        </div>
+        <div className="px-4">
+        <WorkoutExercise onChange={onChangeExercise} data={exercises} />
         </div>
       </div>
     </div>

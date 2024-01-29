@@ -1,11 +1,12 @@
-import { IWorkoutItem } from "../../../../../../interfaces/workout"
+import { useMemo } from "react";
+import { IWorkoutItem } from "../../../../../../interfaces/workout";
 
 interface Props {
   data: IWorkoutItem;
   index: number;
 }
 
-const WorkoutItems = ({ data, index }: Props) => {
+const WorkoutItems = ({ data, index, categories }: Props) => {
   const renderIconType = (type: string) => {
     if (type === 1) {
       return (
@@ -23,7 +24,7 @@ const WorkoutItems = ({ data, index }: Props) => {
             d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
           />
         </svg>
-      )
+      );
     }
     if (type === 2) {
       return (
@@ -41,7 +42,7 @@ const WorkoutItems = ({ data, index }: Props) => {
             d="M19.5 12c0-1.232-.046-2.453-.138-3.662a4.006 4.006 0 0 0-3.7-3.7 48.678 48.678 0 0 0-7.324 0 4.006 4.006 0 0 0-3.7 3.7c-.017.22-.032.441-.046.662M19.5 12l3-3m-3 3-3-3m-12 3c0 1.232.046 2.453.138 3.662a4.006 4.006 0 0 0 3.7 3.7 48.656 48.656 0 0 0 7.324 0 4.006 4.006 0 0 0 3.7-3.7c.017-.22.032-.441.046-.662M4.5 12l3 3m-3-3-3 3"
           />
         </svg>
-      )
+      );
     }
     if (type === 3) {
       return (
@@ -52,13 +53,21 @@ const WorkoutItems = ({ data, index }: Props) => {
         >
           <path d="m16.2 10.7.6-2.4c.1-.3.5-1.7-.3-2.9-.6-.9-1.8-1.4-3.5-1.4h-2c-1.7 0-2.9.5-3.5 1.4-.8 1.2-.4 2.5-.3 2.9l.6 2.4c-1.1 1.1-1.8 2.6-1.8 4.3 0 2.1 1.1 3.9 2.7 5h6.6c1.6-1.1 2.7-2.9 2.7-5 0-1.7-.7-3.2-1.8-4.3m-6.6-1.2-.5-1.7v-.1s-.2-.7.1-1.1c.2-.4.8-.6 1.8-.6h2c.9 0 1.6.2 1.9.5.3.4.1 1.1.1 1.1l-.5 1.9c-.8-.3-1.6-.5-2.5-.5s-1.7.2-2.4.5z" />
         </svg>
-      )
+      );
     }
 
-    return null
-  }
+    return null;
+  };
 
-  const letter = String.fromCharCode(65 + index)
+  const letter = String.fromCharCode(65 + index);
+
+  const category = useMemo(() => {
+    return categories?.find(
+      (item) =>
+        Number(item.id_thetraktor_workout_category) ===
+        Number(data?.id_workout_category)
+    );
+  }, [categories]);
   return (
     <div>
       <div
@@ -101,6 +110,13 @@ const WorkoutItems = ({ data, index }: Props) => {
                 </div>
               )}
             </div>
+            {category && (
+              <div className="flex my-1">
+                <div className="bg-yellow-200 rounded px-3 py-[1px] uppercase text-xs font-bold text-center">
+                  {category?.name}
+                </div>
+              </div>
+            )}
             <div
               className="exercise-title font-bold"
               data-test="exercise-title"
@@ -110,11 +126,16 @@ const WorkoutItems = ({ data, index }: Props) => {
             <ul className="tc-list tc-list--f">
               <li className="tc-list-item exercise-desc">{data?.info}</li>
             </ul>
+            {data?.notes && (
+              <div className="border-t text-xs text-gray-400 mt-2 border-slate-200">
+                {data.notes}
+              </div>
+            )}
           </div>
         </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default WorkoutItems
+export default WorkoutItems;

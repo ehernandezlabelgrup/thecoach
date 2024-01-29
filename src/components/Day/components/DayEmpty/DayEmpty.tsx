@@ -1,22 +1,14 @@
 import CalendarDayActions from "../../../CalendarDayActions"
-import DayTopRow from "../DayTopRow"
 
 interface Props {
-  name: string;
   createRestDay: () => void;
   onCreateWorkout: () => void;
 }
-const DayEmpty = ({ name, onCreateWorkout, createRestDay }: Props) => {
+const DayEmpty = ({ onCreateWorkout, createRestDay }: Props) => {
   return (
-    <div
-      className="day js--is-day week-day is-empty is-future is-small"
-      data-test="week-day"
-      data-test-date="2023-12-10"
-    >
-      <DayTopRow name={name} />
       <div
         id="ember311"
-        className="flex flex-col flex-grow sortable-objects ember-view"
+        className="flex  h-[200px] opacity-0 hover:opacity-100 flex-col flex-grow sortable-objects is-empty ember-view"
       >
         <div
           id="ember312"
@@ -25,7 +17,6 @@ const DayEmpty = ({ name, onCreateWorkout, createRestDay }: Props) => {
           <CalendarDayActions createRestDay={createRestDay} onCreateWorkout={onCreateWorkout} />
         </div>
       </div>
-    </div>
   )
 }
 
