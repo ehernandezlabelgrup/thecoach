@@ -1,6 +1,11 @@
 import PlusIcon from "../Icons/PlusIcon"
 
-function CalendarDayActions({ onCreateWorkout, createRestDay }) {
+interface IProps {
+  onCreateWorkout: () => void
+  createRestDay: () => void
+}
+
+function CalendarDayActions({ onCreateWorkout, createRestDay }: IProps) {
   return (
     <div className="bubble" data-test="calendar-day-actions">
       <div
@@ -12,7 +17,7 @@ function CalendarDayActions({ onCreateWorkout, createRestDay }) {
       </div>
 
       <div
-      onClick={createRestDay}
+        onClick={createRestDay}
         className="bubble-item basis-1/3 ember-tooltip-target"
         data-test="insert-new-rest-day"
       >

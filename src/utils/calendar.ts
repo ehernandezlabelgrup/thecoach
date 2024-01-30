@@ -1,7 +1,7 @@
 import dayjs from "dayjs"
 import isoWeek from "dayjs/plugin/isoWeek"
 import "dayjs/locale/es"
-import { Workout } from "../interfaces/workout"
+import { IWorkout } from "../interfaces/workout"
 
 dayjs.extend(isoWeek)
 
@@ -13,7 +13,7 @@ dayjs.extend(isoWeek)
  * @returns {Array} An array of weeks, each week being an array of day objects containing the date and day name.
  */
 export const createWeeks = (date: Date) => {
-  dayjs.locale("es") 
+  dayjs.locale("es")
 
   const { start: startOfWeek, end: endOfWeek } = crearStartEndMonth(date)
 
@@ -50,7 +50,6 @@ export const createWeeks = (date: Date) => {
   return weeks
 }
 
-
 export const crearStartEndMonth = (date: Date) => {
   const startOfMonth = dayjs(date).startOf("month")
   const endOfMonth = dayjs(date).endOf("month")
@@ -60,19 +59,19 @@ export const crearStartEndMonth = (date: Date) => {
 
   return {
     start: startOfWeek,
-    end: endOfWeek
+    end: endOfWeek,
   }
 }
 
-export const createNewWorkout = (date: string, workouts: Workout[]) => {
-  const count = workouts.filter((item: Workout) => item.date === date).length
+export const createNewWorkout = (date: string, workouts: IWorkout[]) => {
+  const count = workouts.filter((item: IWorkout) => item.date === date).length
   const newWorkout = {
     id: -1,
     date: date,
     workout_items: [
       {
         id: -1,
-      }
+      },
     ],
     position: count + 1,
   }
@@ -81,6 +80,6 @@ export const createNewWorkout = (date: string, workouts: Workout[]) => {
 }
 
 export const createLetterFromNumber = (number: number) => {
-  const alphabet = 'abcdefghijklmnopqrstuvwxyz'.split('')
+  const alphabet = "abcdefghijklmnopqrstuvwxyz".split("")
   return alphabet[number]
 }

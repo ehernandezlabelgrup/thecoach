@@ -4,16 +4,15 @@ export default {
   content: [
     "./index.html",
     "./src/**/*.{js,ts,jsx,tsx}",
-    "./node_modules/tw-elements-react/dist/js/**/*.js"
+    "./node_modules/tw-elements-react/dist/js/**/*.js",
   ],
   theme: {
     extend: {
       fontFamily: {
-        'hongkong': ['hongkong', 'sans-serif'],
-        "proximanova": ["proxima-nova", "sans-serif"],
+        hongkong: ["hongkong", "sans-serif"],
+        proximanova: ["proxima-nova", "sans-serif"],
       },
     },
-  plugins: [twElementsReactPlugin]
+    plugins: [twElementsReactPlugin],
+  },
 }
-}
-

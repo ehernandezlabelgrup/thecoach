@@ -1,23 +1,29 @@
 import { Week as WeekProps } from "../../interfaces/calendarTypes"
 import { ICategories, ITypesMark, IWorkout } from "../../interfaces/workout"
+import { IAudio } from "../Audio/Audio"
 import Day from "../Day"
 
-
 interface Props {
-  week: WeekProps;
-  data: IWorkout[];
-  truncate: boolean;
-  onChangeWorkout: (workout: IWorkout) => void;
-  isEditing: number | null;
-  setIsEditing: (id: number | null, isEditing: boolean) => void;
-  onCreateWorkout: (date: string) => void;
-  saveWorkout: (workout: IWorkout) => void;
-  typesMark: ITypesMark;
-  categories: ICategories;
-  createRestDay: (date: string) => void;
-  onDeleteWorkout: (id: number[]) => void;
-  onEditing: (id: number | null, cancel?: boolean) => void;
-
+  week: WeekProps
+  data: IWorkout[]
+  truncate: boolean
+  onChangeWorkout: (workout: IWorkout) => void
+  isEditing: number | null
+  setIsEditing: (id: number | null, isEditing: boolean) => void
+  onCreateWorkout: (date: string) => void
+  saveWorkout: (workout: IWorkout) => void
+  typesMark: ITypesMark[]
+  categories: ICategories[]
+  createRestDay: (date: string) => void
+  onDeleteWorkout: (id: number[]) => void
+  onEditing: (id: number | null, cancel?: boolean) => void
+  onUploadAudio: (date: string, file: File) => void
+  audios: IAudio[]
+  onDeleteAudio: (date: string) => void
+  onCoyWorkout: (id: number) => void
+  onSelect: (id: number) => void
+  selecteds: number[]
+  pasteWorkout: (date: string) => void
 }
 
 const Week = ({
@@ -38,9 +44,8 @@ const Week = ({
   onCoyWorkout,
   onSelect,
   selecteds,
-  pasteWorkout
+  pasteWorkout,
 }: Props) => {
-
   return (
     <div className="week " id={`week-${week.id}`}>
       <div className="week-days" data-test="week-days">

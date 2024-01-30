@@ -1,7 +1,7 @@
-import { useMemo } from "react";
+import { useMemo } from "react"
 
 interface Props {
-  warmup: string;
+  warmup: string
 }
 
 /**
@@ -14,11 +14,11 @@ const WorkoutWarmUp = ({ warmup = "" }: Props) => {
    */
   const split = useMemo(() => {
     if (warmup) {
-      return warmup?.split("\n");
+      return warmup?.split("\n")
     } else {
-      return [];
+      return []
     }
-  }, [warmup]);
+  }, [warmup])
   return (
     <ul className="tc-list tc-list--f workout-warmup mt-1 font-light">
       {split?.map((item: string, index: number) => (
@@ -27,7 +27,7 @@ const WorkoutWarmUp = ({ warmup = "" }: Props) => {
         </li>
       ))}
     </ul>
-  );
-};
+  )
+}
 
-export default WorkoutWarmUp;
+export default WorkoutWarmUp

@@ -23,15 +23,15 @@ Asegúrate de que todos los componentes y dependencias están correctamente inst
 Importa y utiliza el componente `Day` en tu aplicación de React.
 
 ```jsx
-import React from "react";
-import Day from "./path/to/Day";
+import React from "react"
+import Day from "./path/to/Day"
 
 function CalendarView() {
-  const loading = false; // Determina si mostrar el estado de carga o no
-  return <Day loading={loading} />;
+  const loading = false // Determina si mostrar el estado de carga o no
+  return <Day loading={loading} />
 }
 
-export default CalendarView;
+export default CalendarView
 ```
 
 ## Props

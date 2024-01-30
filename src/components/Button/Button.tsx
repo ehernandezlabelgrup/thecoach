@@ -1,12 +1,12 @@
 import { useMemo } from "react"
 
-interface IProps{
-  onClick: () => void;
-  mode?: 'primary' | 'alert';
-  title: string;
+interface IProps {
+  onClick: () => void
+  mode?: "primary" | "alert"
+  title: string
 }
 
-const Button = ({ onClick, mode = "primary" , title}: IProps) => {
+const Button = ({ onClick, mode = "primary", title }: IProps) => {
   const styles = useMemo(() => {
     if (mode === "alert") {
       return "bg-red-400 text-white hover:bg-red-500 focus:bg-red-500 active:bg-red-600"

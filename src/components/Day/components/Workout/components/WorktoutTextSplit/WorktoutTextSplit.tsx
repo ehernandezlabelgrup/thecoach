@@ -1,7 +1,7 @@
-import { useMemo } from "react";
+import { useMemo } from "react"
 
 interface Props {
-  text: string;
+  text: string
 }
 
 /**
@@ -14,11 +14,11 @@ const WorktoutTextSplit = ({ text = "" }: Props) => {
    */
   const split = useMemo(() => {
     if (text) {
-      return text?.split("\n");
+      return text?.split("\n")
     } else {
-      return [];
+      return []
     }
-  }, [text]);
+  }, [text])
   return (
     <ul className="tc-list tc-list--f workout-cooldown font-light !pt-1 !mt-1 !pb-1 !mb-1">
       {split?.map((item: string, index: number) => (
@@ -27,7 +27,7 @@ const WorktoutTextSplit = ({ text = "" }: Props) => {
         </li>
       ))}
     </ul>
-  );
-};
+  )
+}
 
-export default WorktoutTextSplit;
+export default WorktoutTextSplit

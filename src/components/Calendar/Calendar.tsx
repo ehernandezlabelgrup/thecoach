@@ -1,19 +1,31 @@
-import { useEffect, useState } from "react";
-import { Week as Weeks } from "../../interfaces/calendarTypes";
-import { ICategories, ITypesMark, IWorkout } from "../../interfaces/workout";
-import Week from "../Week";
-import "./styles.css";
-import { toast } from "react-toastify";
-import { createNewWorkout } from "../../utils/calendar";
-import axios from "axios";
-import { DragDropContext } from "react-beautiful-dnd";
+import { useEffect, useState } from "react"
+import { Week as Weeks } from "../../interfaces/calendarTypes"
+import { ICategories, ITypesMark, IWorkout } from "../../interfaces/workout"
+import Week from "../Week"
+import "./styles.css"
+import { toast } from "react-toastify"
+import { createNewWorkout } from "../../utils/calendar"
+import axios from "axios"
+import { DragDropContext } from "react-beautiful-dnd"
+import { IAudio } from "../Audio/Audio"
 
+interface IDragContext {
+  draggableId: string
+  destination?: {
+    droppableId: string
+    index: number
+  }
+  type?: string
+}
 interface Props {
-  weeks: Weeks[];
-  data: IWorkout[];
-  truncate: boolean;
-  categories: ICategories;
-  typesMark: ITypesMark;
+  weeks: Weeks[]
+  data: IWorkout[]
+  truncate: boolean
+  categories: ICategories[]
+  typesMark: ITypesMark[]
+  URL_BASE: string
+  getData: () => void
+  loadingGeneral: boolean
 }
 
 const Calendar = ({
@@ -24,45 +36,45 @@ const Calendar = ({
   typesMark,
   URL_BASE,
   getData,
+  loadingGeneral,
 }: Props) => {
-  const [workouts, setWorkouts] = useState<IWorkout[]>(data);
-  const [isEditing, setIsEditing] = useState<number | null>(null);
-  const [audios, setAudios] = useState<any[]>([]);
+  const [workouts, setWorkouts] = useState<IWorkout[]>(data)
+  const [isEditing, setIsEditing] = useState<number | null>(null)
+  const [audios, setAudios] = useState<IAudio[]>([])
 
   const onChangeWorkout = (workout: IWorkout) => {
     const newData = workouts.map((item: IWorkout) => {
       if (item.id === workout.id) {
-        return workout;
+        return workout
       }
-      return item;
-    });
+      return item
+    })
 
-    setWorkouts(newData);
-  };
+    setWorkouts(newData)
+  }
 
-  const [selecteds, setSelected] = useState<number[]>([]);
+  const [selecteds, setSelected] = useState<number[]>([])
 
   const onSelect = (id: number) => {
-    let newSelecteds = [...selecteds];
+    let newSelecteds = [...selecteds]
 
     if (newSelecteds.includes(id)) {
-      newSelecteds = newSelecteds.filter((item) => item !== id);
+      newSelecteds = newSelecteds.filter((item) => item !== id)
     } else {
-      newSelecteds.push(id);
+      newSelecteds.push(id)
     }
-    setSelected(newSelecteds);
-  };
+    setSelected(newSelecteds)
+  }
 
-  const onCoyWorkout = (id, multiple = false) => {
-    if(multiple){
-      localStorage.setItem("workouts_id", JSON.stringify(selecteds));
-      setSelected([]);
-      toast.success("Entrenamientos copiados");
-    }else{
-      localStorage.setItem("workouts_id", JSON.stringify([id]));
+  const onCoyWorkout = (id: number[] | number, multiple = false) => {
+    if (multiple) {
+      localStorage.setItem("workouts_id", JSON.stringify(selecteds))
+      setSelected([])
+      toast.success("Entrenamientos copiados")
+    } else {
+      localStorage.setItem("workouts_id", JSON.stringify([id]))
     }
-    
-  };
+  }
 
   const onEditing = (id: number | null, cancel = false) => {
     if (cancel) {
@@ -71,218 +83,259 @@ const Calendar = ({
        * con id -1
        * @author ehernandez
        */
-      const newData = workouts.filter((item) => item.id !== -1);
-      setWorkouts(newData);
-      return setIsEditing(null);
+      const newData = workouts.filter((item) => item.id !== -1)
+      setWorkouts(newData)
+      return setIsEditing(null)
     }
 
     if (id) {
-      return setIsEditing(id);
+      return setIsEditing(id)
     }
-  };
+  }
 
   const onCreateWorkout = (date: string) => {
-    const data = createNewWorkout(date, workouts);
-    setWorkouts(data as IWorkout[]);
-    setIsEditing(-1);
-  };
+    const data = createNewWorkout(date, workouts)
+    setWorkouts(data as IWorkout[])
+    setIsEditing(-1)
+  }
 
   const saveWorkout = async (workout: IWorkout) => {
     if (Number(workout.id) < 0) {
-      workout.id = 0;
+      workout.id = 0
     }
 
-    let countRanking = 0;
-    let isValid = true;
+    let countRanking = 0
+    let isValid = true
 
     const items = workout?.workout_items?.map((item) => {
       if (!item.id_workout_category) {
-        item.id_workout_category = 0;
+        item.id_workout_category = "0"
       }
 
       if (Number(item.is_ranking)) {
-        countRanking++;
+        countRanking++
       }
 
       if (Number(item.id_thetraktor_type_mark) === 1) {
-        const regex = /^\d{2}:\d{2}$/;
+        const regex = /^\d{2}:\d{2}$/
         if (!regex.test(item.min_result)) {
-          toast.error("El formato de la marca es incorrecto deberia ser NN:NN");
-          isValid = false;
+          toast.error("El formato de la marca es incorrecto deberia ser NN:NN")
+          isValid = false
         }
       } else {
         if (Number(item.min_result) !== 0) {
           if (!Number(item.min_result)) {
-            toast.error("La marca debe ser mayor a 0");
-            isValid = false;
+            toast.error("La marca debe ser mayor a 0")
+            isValid = false
           }
         }
       }
 
-      return item;
-    });
+      return item
+    })
 
     if (countRanking > 1) {
-      toast.error("Solo puede haber un ejercicio con ranking");
-      return;
+      toast.error("Solo puede haber un ejercicio con ranking")
+      return
     }
 
     if (!isValid) {
-      return;
+      return
     }
 
-    workout.workout_items = items;
+    workout.workout_items = items
     const { data, status } = await axios.post(
       `${URL_BASE}/module/thetraktor/program?action=workouts&id_program=1`,
       {
         ...workout,
-      }
-    );
+      },
+    )
     if (status === 200) {
       if (data?.success) {
-        const { psdata } = data;
-        toast.success("Entrenamiento guardado");
-        setIsEditing(null);
+        const { psdata } = data
+        toast.success("Entrenamiento guardado")
+        setIsEditing(null)
         if (workout.id) {
-          onChangeWorkout(psdata);
+          onChangeWorkout(psdata)
         } else {
-          setWorkouts([...workouts, psdata]);
+          setWorkouts([...workouts, psdata])
         }
       } else {
-        toast.error(data?.error);
+        toast.error(data?.error)
       }
     }
-  };
+  }
 
   const getAudios = async () => {
     const { data, status } = await axios.get(
-      `${URL_BASE}/module/thetraktor/program?action=audios&id_program=1`
-    );
+      `${URL_BASE}/module/thetraktor/program?action=audios&id_program=1`,
+    )
     if (status === 200) {
       if (data?.success) {
-        setAudios(data?.psdata);
+        setAudios(data?.psdata)
       } else {
-        toast.error(data?.error);
+        toast.error(data?.error)
       }
     }
-  };
+  }
 
   const createRestDay = async (date: string) => {
     const { data, status } = await axios.post(
       `${URL_BASE}/module/thetraktor/program?action=restday&id_program=1`,
       {
         date: date,
-      }
-    );
+      },
+    )
     if (status === 200) {
       if (data?.success) {
-        toast.success("Rest day created");
-        setWorkouts([...workouts, data?.psdata]);
+        toast.success("Rest day created")
+        setWorkouts([...workouts, data?.psdata])
       } else {
-        toast.error(data?.error);
+        toast.error(data?.error)
       }
     }
-  };
-
-  const onDeleteWorkout = async (ids: number[]) => {
-    const idsConverted = ids.map((id) => `ids[]=${id}`).join("&");
-    setSelected([]);
-    const { data, status } = await axios.delete(
-      `${URL_BASE}/module/thetraktor/program?action=workouts&id_program=1&${idsConverted}`
-    );
-    await getData();
-    if (status === 200) {
-      if (data?.success) {
-        toast.success("Entrenamiento eliminado");
-        return true;
-      } else {
-        toast.error(data?.error);
-        return false;
-      }
-    }
-  
-  };
-
-  const pasteWorkout = async (date: string) => {
-    const ids = JSON.parse(localStorage.getItem("workouts_id"));
-    const { data, status } = await axios.post(
-      `${URL_BASE}/module/thetraktor/program?action=paste&id_program=1`,
-      {
-        ids,
-        date,
-      }
-    );
-    if (status === 200) {
-      if (data?.success) {
-        toast.success("Entrenamiento pegado");
-        getData();
-      } else {
-        toast.error(data?.error);
-      }
-    }
-
   }
 
-  const onMoveWorkout = async (movable) => {
+  const onDeleteWorkout = async (ids: number[]) => {
+    const idsConverted = ids.map((id) => `ids[]=${id}`).join("&")
+    setSelected([])
+    const { data, status } = await axios.delete(
+      `${URL_BASE}/module/thetraktor/program?action=workouts&id_program=1&${idsConverted}`,
+    )
+    await getData()
+    if (status === 200) {
+      if (data?.success) {
+        toast.success("Entrenamiento eliminado")
+        return true
+      } else {
+        toast.error(data?.error)
+        return false
+      }
+    }
+  }
+
+  const pasteWorkout = async (date: string) => {
+    // eslint-disable-next-line prettier/prettier
+    if (localStorage.getItem("workouts_id")) {
+      let ids = localStorage.getItem("workouts_id")
+      if (!ids) {
+        return
+      }
+
+      ids = JSON.parse(ids)
+      const { data, status } = await axios.post(
+        `${URL_BASE}/module/thetraktor/program?action=paste&id_program=1`,
+        {
+          ids,
+          date,
+        },
+      )
+      if (status === 200) {
+        if (data?.success) {
+          toast.success("Entrenamiento pegado")
+          getData()
+        } else {
+          toast.error(data?.error)
+        }
+      }
+    }
+  }
+
+  const onMoveWorkout = async (movable: IDragContext) => {
+    if (!movable.destination) {
+      return
+    }
+
+    if (movable.type === "workout_item") {
+      const id_workout = movable.destination.droppableId
+      const id_workout_item = movable.draggableId.replace("workout_item_", "")
+      const position = movable.destination.index + 1
+      const url = `${URL_BASE}/module/thetraktor/program?action=move_workout_item&id_program=1&id_workout=${id_workout}&id_workout_item=${id_workout_item}&position=${position}`
+      await axios.get(url)
+      await getData()
+      return
+    }
+
     const filterWorkout = workouts.map((item) => {
       if (Number(item.id) === Number(movable.draggableId)) {
-        item.date = movable.destination.droppableId;
+        if (movable.destination) {
+          item.date = movable.destination.droppableId
+        }
       }
-      return item;
-    });
-    setWorkouts(filterWorkout);
+      return item
+    })
+    setWorkouts(filterWorkout)
     const { data, status } = await axios.get(
       `${URL_BASE}/module/thetraktor/program?action=move_workout&id_program=1&id_workout=${
         movable.draggableId
       }&date=${movable.destination.droppableId}&position=${
         Number(movable.destination.index) + 1
-      }`
-    );
+      }`,
+    )
     if (status === 200) {
       if (!data?.success) {
-        getData();
-        toast.error(data?.error);
+        getData()
+        toast.error(data?.error)
       }
     }
-  };
+  }
 
   const onUploadAudio = async (date: string, file: File) => {
-    const formData = new FormData();
-    formData.append("audio", file);
+    const formData = new FormData()
+    formData.append("audio", file)
     const { data, status } = await axios.post(
       `${URL_BASE}/module/thetraktor/program?action=upload_audio&id_program=1&date=${date}`,
-      formData
-    );
+      formData,
+    )
     if (status === 200) {
       if (data?.success) {
-        toast.success("Audio cargado");
-        setAudios(data?.psdata);
+        toast.success("Audio cargado")
+        setAudios(data?.psdata)
       } else {
-        toast.error(data?.error);
+        toast.error(data?.error)
       }
     }
-  };
-
-
+  }
 
   const onDeleteAudio = async (date: string) => {
     const au = audios.filter((audio) => {
-      return audio.date !== date;
-    });
-    setAudios(au);
-  };
+      return audio.date !== date
+    })
+    setAudios(au)
+  }
 
   useEffect(() => {
-    setWorkouts(data);
-  }, [data]);
+    setWorkouts(data)
+  }, [data])
 
   useEffect(() => {
-    getAudios();
-  }, []);
+    getAudios()
+  }, [])
 
   return (
     <>
-      <DragDropContext onDragEnd={onMoveWorkout}>
+      <DragDropContext
+        onDragEnd={(res) => {
+          const input = {
+            draggableId: res.draggableId,
+          } as IDragContext
+
+          if (res.destination?.droppableId) {
+            input.destination = {
+              droppableId: res.destination?.droppableId,
+              index: res.destination?.index,
+            }
+          }
+
+          if (res.type) {
+            input.type = res.type
+          }
+          onMoveWorkout(input)
+        }}
+      >
+        {loadingGeneral && (
+          <div className="absolute h-full w-full bg-white opacity-50 z-10" />
+        )}
         <div className="calendar font-proximanova js--calendar  trainerFrame-calendar">
           {weeks.map((week, index) => (
             <Week
@@ -330,8 +383,9 @@ const Calendar = ({
 
           <div className="items-center flex flex-row">
             <button
-            onClick={() => onCoyWorkout(selecteds, true)}
-            className="btn btn--primary">
+              onClick={() => onCoyWorkout(selecteds, true)}
+              className="btn btn--primary"
+            >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 24 24"
@@ -344,9 +398,10 @@ const Calendar = ({
                 />
               </svg>
             </button>
-            <button 
-            onClick={() => onDeleteWorkout(selecteds)}
-            className="btn btn--primary">
+            <button
+              onClick={() => onDeleteWorkout(selecteds)}
+              className="btn btn--primary"
+            >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 24 24"
@@ -363,7 +418,7 @@ const Calendar = ({
         </div>
       )}
     </>
-  );
-};
+  )
+}
 
-export default Calendar;
+export default Calendar

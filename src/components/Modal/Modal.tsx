@@ -8,10 +8,10 @@ import {
 import Button from "../Button"
 
 interface IProps {
-    visible: boolean
-    onRequestClose?: () => void
-    onAccept?: () => void
-    children: React.ReactNode
+  visible: boolean
+  onRequestClose?: () => void
+  onAccept?: () => void
+  children: React.ReactNode
 }
 
 const Modal = ({ visible, onRequestClose, children, onAccept }: IProps) => {

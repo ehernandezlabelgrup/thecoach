@@ -29,18 +29,18 @@ npm install dayjs pikaday
 Para usar el componente `CalendarNav`, impórtalo en tu componente de React y pásale las props necesarias.
 
 ```jsx
-import React from "react";
-import { CalendarNav } from "./path/to/CalendarNav";
+import React from "react"
+import { CalendarNav } from "./path/to/CalendarNav"
 
 function App() {
   return (
     <div>
       <CalendarNav loading={false} />
     </div>
-  );
+  )
 }
 
-export default App;
+export default App
 ```
 
 ## Props

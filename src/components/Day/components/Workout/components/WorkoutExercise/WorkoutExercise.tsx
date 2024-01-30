@@ -1,77 +1,79 @@
-import { useRef, useState } from "react";
-import { Exercise } from "../../../../../../interfaces/workout";
-import { MentionsInput, Mention } from "react-mentions";
-import axios from "axios";
-import ExercisesItems from "../ExercisesItems";
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { useRef, useState } from "react"
+import { Exercise } from "../../../../../../interfaces/workout"
+import { MentionsInput, Mention } from "react-mentions"
+import axios from "axios"
+import ExercisesItems from "../ExercisesItems"
 
 interface Props {
-  data: Exercise[];
-  onChange: (exercises: Exercise[]) => void;
+  data: Exercise[]
+  onChange: (exercises: Exercise) => void
+}
+
+export interface IExecercises {
+  id: number
+  name: string
+  video: string
 }
 
 const WorkoutExercise = ({ data, onChange }: Props) => {
-  const [exercises, setExercises] = useState<Exercise[]>(data || []);
-  const [value, setValue] = useState("");
-  const timer = useRef(null);
+  const [exercises, setExercises] = useState<Exercise[]>(data || [])
+  const [value, setValue] = useState("")
+  const timer = useRef<NodeJS.Timeout | null>(null)
 
-  const getData = (query: string, callback) => {
-    if (!query) return callback([]);
+  const getData = (query: string, callback: (arg0: never[]) => void) => {
+    if (!query) return callback([])
     if (timer.current) {
-      clearTimeout(timer.current);
+      clearTimeout(timer.current)
     }
 
     timer.current = setTimeout(() => {
       axios
         .get(
           "https://pre.thetraktor.app/module/thetraktor/getallexercises?per_page=40&name=" +
-          value
+            value,
         )
         .then((response) => {
           if (response.status === 200) {
             callback(
-              response?.data?.psdata?.map((item) => {
+              response?.data?.psdata?.map((item: IExecercises) => {
                 return {
                   id: item.id,
                   display: item.name,
                   name: item.name,
                   video: item.video,
-                };
-              })
-            );
+                }
+              }),
+            )
           }
-          return response.data;
-        });
-    }, 500);
-  };
+          return response.data
+        })
+    }, 500)
+  }
 
   const deleteExercise = (id: number) => {
-    const newData = exercises.filter(
-      (exercise: Exercise) => exercise.id !== id
-    );
-    onChange(newData);
-    setExercises(newData);
-  };
-  const addExercise = (id: number, display, d) => {
-
-
-
+    const newData = exercises.filter((exercise: Exercise) => exercise.id !== id)
+    onChange(newData as any)
+    setExercises(newData)
+  }
+  const addExercise = (id: number, display: string) => {
     const existsInExercises = exercises.find(
-      (exercise: Exercise) => exercise.id === id
-    ) as Exercise;
+      (exercise: Exercise) => exercise.id === id,
+    ) as Exercise
 
     if (existsInExercises) {
-      return;
+      return
     }
 
     const newExercise = {
       id,
       name: display,
-    };
-    const newData = [...exercises, newExercise];
-    onChange(newData);
-    setExercises(newData);
-    setValue("");
-  };
+    }
+    const newData = [...exercises, newExercise]
+    onChange(newData as any)
+    setExercises(newData)
+    setValue("")
+  }
 
   return (
     <>
@@ -115,8 +117,8 @@ const WorkoutExercise = ({ data, onChange }: Props) => {
                 trigger=""
                 data={getData}
                 onAdd={(id, display) => {
-                  addExercise(Number(id), display);
-                  setValue("");
+                  addExercise(Number(id), display)
+                  setValue("")
                 }}
               />
             </MentionsInput>
@@ -150,7 +152,7 @@ const WorkoutExercise = ({ data, onChange }: Props) => {
         <ExercisesItems data={exercises} onDeleteExercise={deleteExercise} />
       </div>
     </>
-  );
-};
+  )
+}
 
-export default WorkoutExercise;
+export default WorkoutExercise

@@ -1,59 +1,51 @@
-import { useRef, useState, useEffect } from "react";
-import Modal from "../Modal";
+import { useRef, useState, useEffect } from "react"
+import Modal from "../Modal"
 
-const Audio = ({ audio, onDeleteAudio }) => {
-  const ref = useRef(null);
-  const [isPlaying, setIsPlaying] = useState(false);
-  const [showModal, setShowModal] = useState(false);
-  const [showModalDelete, setShowModalDelete] = useState(false);
-  // Función para reproducir el audio
-  const playAudio = () => {
-    const audio = ref.current;
-    if (audio) {
-      audio.play();
-      setIsPlaying(true);
-    }
-  };
+export interface IAudio {
+  audio_url: string
+  date: string
+}
 
-  // Función para pausar el audio
-  const pauseAudio = () => {
-    const audio = ref.current;
-    if (audio) {
-      audio.pause();
-      setIsPlaying(false);
-    }
-  };
+interface IProps {
+  audio: IAudio
+  onDeleteAudio: () => void
+}
 
-  // Función para detener el audio
+const Audio = ({ audio, onDeleteAudio }: IProps) => {
+  const ref = useRef<HTMLAudioElement>(null)
+  const [isPlaying, setIsPlaying] = useState(false)
+  const [showModal, setShowModal] = useState(false)
+  const [showModalDelete, setShowModalDelete] = useState(false)
+
   const stopAudio = () => {
-    const audio = ref.current;
+    const audio = ref.current
     if (audio) {
-      audio.pause();
-      audio.currentTime = 0;
-      setIsPlaying(false);
+      audio.pause()
+      audio.currentTime = 0
+      setIsPlaying(false)
     }
-  };
+  }
 
   // Efecto para detectar cuando el audio termina
   useEffect(() => {
-    const audio = ref.current;
+    const audio = ref.current
     if (audio) {
-      const handleAudioEnd = () => setIsPlaying(false);
-      audio.addEventListener("ended", handleAudioEnd);
+      const handleAudioEnd = () => setIsPlaying(false)
+      audio.addEventListener("ended", handleAudioEnd)
 
       return () => {
-        audio.removeEventListener("ended", handleAudioEnd);
-      };
+        audio.removeEventListener("ended", handleAudioEnd)
+      }
     }
-  }, []);
+  }, [])
 
   // Función para eliminar el audio
   const handleDeleteAudio = () => {
     if (isPlaying) {
-      stopAudio(); // Detiene el audio si está en reproducción
+      stopAudio() // Detiene el audio si está en reproducción
     }
-    onDeleteAudio(); // Llama a la función pasada por props para eliminar el audio
-  };
+    onDeleteAudio() // Llama a la función pasada por props para eliminar el audio
+  }
 
   return (
     <div className="audio">
@@ -78,8 +70,8 @@ const Audio = ({ audio, onDeleteAudio }) => {
           <audio controls ref={ref} src={audio?.audio_url} />
           <button
             onClick={() => {
-              setShowModalDelete(true);
-              setShowModal(false);
+              setShowModalDelete(true)
+              setShowModal(false)
             }}
           >
             <svg
@@ -105,7 +97,7 @@ const Audio = ({ audio, onDeleteAudio }) => {
         ¿Está seguro que desea eliminar este audio?
       </Modal>
     </div>
-  );
-};
+  )
+}
 
-export default Audio;
+export default Audio

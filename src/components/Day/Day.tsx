@@ -1,28 +1,35 @@
-import { Day as DayProps } from "../../interfaces/calendarTypes";
-import DayEmpty from "./components/DayEmpty";
-import DayLoading from "./components/DayLoading";
-import DayTopRow from "./components/DayTopRow";
-import "./styles.css";
-import { ICategories, ITypesMark, IWorkout } from "../../interfaces/workout";
-import Workout from "./components/Workout";
-import RestDay from "../RestDay";
-import { Droppable } from "react-beautiful-dnd";
-import { useRef, useState } from "react";
-import Audio from "../Audio";
+import { Day as DayProps } from "../../interfaces/calendarTypes"
+import DayEmpty from "./components/DayEmpty"
+import DayLoading from "./components/DayLoading"
+import DayTopRow from "./components/DayTopRow"
+import "./styles.css"
+import { ICategories, ITypesMark, IWorkout } from "../../interfaces/workout"
+import Workout from "./components/Workout"
+import RestDay from "../RestDay"
+import { Droppable } from "react-beautiful-dnd"
+import { useMemo } from "react"
+import { IAudio } from "../Audio/Audio"
 
 interface Props {
-  loading: boolean;
-  day: DayProps;
-  data: IWorkout[];
-  truncate: boolean;
-  onCreateWorkout: (date: string) => void;
-  isEditing: number | null;
-  setIsEditing: (id: number | null, isEditing: boolean) => void;
-  saveWorkout: (workout: IWorkout) => void;
-  typesMark: ITypesMark;
-  categories: ICategories;
-  createRestDay: (date: string) => void;
-  onDeleteWorkout: (id: number[]) => void;
+  loading: boolean
+  day: DayProps
+  data: IWorkout[]
+  truncate: boolean
+  onCreateWorkout: (date: string) => void
+  isEditing: number | null
+  setIsEditing: (id: number | null, isEditing: boolean) => void
+  saveWorkout: (workout: IWorkout) => void
+  typesMark: ITypesMark[]
+  categories: ICategories[]
+  createRestDay: (date: string) => void
+  onDeleteWorkout: (id: number[]) => void
+  onUploadAudio: (date: string, file: File) => void
+  audios: IAudio[] | undefined
+  onCoyWorkout: (id: number) => void
+  onSelect: (id: number) => void
+  selecteds: number[]
+  pasteWorkout: (date: string) => void
+  onDeleteAudio: (date: string) => void
 }
 const Day = ({
   loading,
@@ -40,21 +47,21 @@ const Day = ({
   onUploadAudio,
   audios,
   onCoyWorkout,
-  onSelect, 
+  onSelect,
   selecteds,
-  pasteWorkout
+  pasteWorkout,
 }: Props) => {
-  const workout = data?.filter(
-    (workout: IWorkout) => workout.date === day.date
-  );
+  const workout = useMemo(() => {
+    return data?.filter((workout: IWorkout) => workout.date === day.date)
+  }, [data])
 
-  const name = `${day.dayName} ${day.dayNumber}`;
+  const name = `${day.dayName} ${day.dayNumber}`
 
   if (loading) {
-    return <DayLoading />;
+    return <DayLoading />
   }
 
-  const audio = audios.find((audio) => audio.date === day.date);
+  const audio = audios?.find((audio) => audio.date === day.date)
 
   return (
     <div
@@ -63,11 +70,14 @@ const Day = ({
       }  is-small`}
       data-test="week-day"
     >
-      <DayTopRow 
-      pasteWorkout={pasteWorkout}
-      audio={audio}
-      onUploadAudio={onUploadAudio} name={name} date={day.date} />
-     
+      <DayTopRow
+        pasteWorkout={pasteWorkout}
+        audio={audio}
+        onUploadAudio={onUploadAudio}
+        name={name}
+        date={day.date}
+      />
+
       <Droppable droppableId={day.date} type="workout">
         {(provided) => (
           <div
@@ -79,8 +89,8 @@ const Day = ({
               workout.map((workout: IWorkout, index) =>
                 workout.rest_day ? (
                   <RestDay
-                  onSelect={() => onSelect(workout?.id)}
-                  selected = {selecteds.includes(workout?.id)}
+                    onSelect={() => onSelect(workout?.id)}
+                    selected={selecteds.includes(workout?.id)}
                     isEditing={Number(workout.id) === Number(isEditing)}
                     onClick={() => setIsEditing(Number(workout.id), false)}
                     data={workout}
@@ -91,10 +101,9 @@ const Day = ({
                   />
                 ) : (
                   <Workout
-                  onSelect={() => onSelect(workout?.id)}
-                  selected = {selecteds.includes(workout?.id)}
-
-                  onCoyWorkout={onCoyWorkout}
+                    onSelect={() => onSelect(workout?.id)}
+                    selected={selecteds.includes(workout?.id)}
+                    onCoyWorkout={onCoyWorkout}
                     index={index}
                     truncate={truncate}
                     onSave={saveWorkout}
@@ -107,12 +116,11 @@ const Day = ({
                     categories={categories}
                     onDelete={() => onDeleteWorkout([workout.id])}
                   />
-                )
+                ),
               )
             ) : (
               <DayEmpty
                 createRestDay={() => createRestDay(day.date)}
-                name={name}
                 onCreateWorkout={() => onCreateWorkout(day.date)}
               />
             )}
@@ -122,8 +130,7 @@ const Day = ({
         )}
       </Droppable>
     </div>
-  );
+  )
+}
 
-};
-
-export default Day;
+export default Day

@@ -1,20 +1,28 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import MoveIcon from "../../../../../Icons/MoveIcon"
 import PasteIcon from "../../../../../Icons/PasteIcon"
 
 interface Props {
   title: string
-
+  provided?: any
+  onCoyWorkout: () => void
+  selected: boolean
+  onSelect: () => void
 }
 
-const WorkoutHeader = ({ title, provided, onCoyWorkout, selected, onSelect }: Props) => {
+const WorkoutHeader = ({
+  title,
+  provided,
+  onCoyWorkout,
+  selected,
+  onSelect,
+}: Props) => {
   return (
     <div className="workout-header js--workout-header-10427706617">
       <div className="split split--nowrap">
         <div className="pt-1 pb-1">
           <div className="bucket bucket--f">
-            <div 
-            onClick={e => e.stopPropagation()}
-            className="bucket-media">
+            <div onClick={(e) => e.stopPropagation()} className="bucket-media">
               <input
                 aria-label="Select Workout"
                 className="workout-checkbox"
@@ -32,15 +40,23 @@ const WorkoutHeader = ({ title, provided, onCoyWorkout, selected, onSelect }: Pr
           </div>
         </div>
         <div className="workout-controls tc-list tc-list--inline tc-list--flag tc-list--f">
-          <a onClick={e => {
-            e.stopPropagation()
-            onCoyWorkout()
-          }}  className="tc-list-item workout-copy ember-tooltip-target">
+          <a
+            onClick={(e) => {
+              e.stopPropagation()
+              onCoyWorkout()
+            }}
+            className="tc-list-item workout-copy ember-tooltip-target"
+          >
             <PasteIcon />
           </a>
-          {provided && <a {...provided.dragHandleProps} className="workout-drag js--drag-handle tc-list-item">
-            <MoveIcon />
-          </a>}
+          {provided && (
+            <a
+              {...provided.dragHandleProps}
+              className="workout-drag js--drag-handle tc-list-item"
+            >
+              <MoveIcon />
+            </a>
+          )}
         </div>
       </div>
     </div>

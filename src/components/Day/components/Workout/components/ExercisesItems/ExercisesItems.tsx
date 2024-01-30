@@ -2,13 +2,13 @@ import {
   TEPopover,
   TEPopoverContent,
   TEPopoverToggler,
-} from "tw-elements-react";
-import { Exercise } from "../../../../../../interfaces/workout";
-import XMarkIcon from "../../../../../Icons/XMarkIcon";
+} from "tw-elements-react"
+import { Exercise } from "../../../../../../interfaces/workout"
+import XMarkIcon from "../../../../../Icons/XMarkIcon"
 
 interface Props {
-  data: Exercise[];
-  onDeleteExercise?: (id: number) => void;
+  data: Exercise[]
+  onDeleteExercise?: (id: number) => void
 }
 
 const ExercisesItems = ({ data, onDeleteExercise }: Props) => {
@@ -16,7 +16,7 @@ const ExercisesItems = ({ data, onDeleteExercise }: Props) => {
     <div
       className="tags add-tags scroll my-1"
       onClick={(e) => {
-        e.stopPropagation();
+        e.stopPropagation()
       }}
     >
       {data?.map((exercise: Exercise) => {
@@ -89,10 +89,10 @@ const ExercisesItems = ({ data, onDeleteExercise }: Props) => {
               </button>
             )}
           </div>
-        );
+        )
       })}
     </div>
-  );
-};
+  )
+}
 
-export default ExercisesItems;
+export default ExercisesItems

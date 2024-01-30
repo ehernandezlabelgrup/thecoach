@@ -1,27 +1,37 @@
-import { IWorkout } from "../../interfaces/workout";
-import WorkoutHeader from "../Day/components/Workout/components/WorkoutHeader";
-import TrashIcon from "../Icons/TrashIcon";
-import Modal from "../Modal";
-import { useState } from "react";
-import { Draggable } from "react-beautiful-dnd";
+import { IWorkout } from "../../interfaces/workout"
+import WorkoutHeader from "../Day/components/Workout/components/WorkoutHeader"
+import TrashIcon from "../Icons/TrashIcon"
+import Modal from "../Modal"
+import { useState } from "react"
+import { Draggable } from "react-beautiful-dnd"
 
 interface IProps {
-  data: IWorkout;
-  onClick: () => void;
-  isEditing: boolean;
-  onDelete: () => void;
-  index: number;
+  data: IWorkout
+  onClick: () => void
+  isEditing: boolean
+  onDelete: () => void
+  index: number
+  onCoyWorkout: (id: number) => void
+  selected: boolean
+  onSelect: () => void
 }
 
-const RestDay = ({ data, onClick, isEditing, onDelete, index, onCoyWorkout, selected, onSelect }: IProps) => {
-  const [showModal, setShowModal] = useState(false);
+const RestDay = ({
+  data,
+  onClick,
+  isEditing,
+  onDelete,
+  index,
+  onCoyWorkout,
+  selected,
+  onSelect,
+}: IProps) => {
+  const [showModal, setShowModal] = useState(false)
 
   const onDeleteRestDay = async () => {
-    await onDelete();
-    setShowModal(false);
-  };
-
-  
+    await onDelete()
+    setShowModal(false)
+  }
 
   return (
     <Draggable draggableId={`${data?.id.toString()}`} index={index}>
@@ -35,14 +45,13 @@ const RestDay = ({ data, onClick, isEditing, onDelete, index, onCoyWorkout, sele
             onClick={onClick}
             className={`workout is-active is-small has-workoutControls`}
           >
-            <WorkoutHeader 
-            selected={selected}
-            onSelect={onSelect}
-                                onCoyWorkout={()=> onCoyWorkout(data.id)}
-                                
-
-            provided={provided}
-            title={data.title} />
+            <WorkoutHeader
+              selected={selected}
+              onSelect={onSelect}
+              onCoyWorkout={() => onCoyWorkout(data.id)}
+              provided={provided}
+              title={data.title}
+            />
             <div data-test="delete-button flex flex-row">
               {isEditing && (
                 <button
@@ -54,7 +63,6 @@ const RestDay = ({ data, onClick, isEditing, onDelete, index, onCoyWorkout, sele
                   <TrashIcon />
                 </button>
               )}
-
             </div>
             <Modal
               onRequestClose={() => setShowModal(false)}
@@ -67,7 +75,7 @@ const RestDay = ({ data, onClick, isEditing, onDelete, index, onCoyWorkout, sele
         </div>
       )}
     </Draggable>
-  );
-};
+  )
+}
 
-export default RestDay;
+export default RestDay
