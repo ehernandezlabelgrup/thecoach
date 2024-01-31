@@ -6,7 +6,6 @@ import Day from "../Day"
 interface Props {
   week: WeekProps
   data: IWorkout[]
-  truncate: boolean
   onChangeWorkout: (workout: IWorkout) => void
   isEditing: number | null
   setIsEditing: (id: number | null, isEditing: boolean) => void
@@ -19,17 +18,17 @@ interface Props {
   onEditing: (id: number | null, cancel?: boolean) => void
   onUploadAudio: (date: string, file: File) => void
   audios: IAudio[]
-  onDeleteAudio: (date: string) => void
   onCoyWorkout: (id: number) => void
   onSelect: (id: number) => void
   selecteds: number[]
   pasteWorkout: (date: string) => void
+  URL_BASE: string
+  setSelectAudio: (audio: IAudio) => void
 }
 
 const Week = ({
   week,
   data,
-  truncate,
   onCreateWorkout,
   isEditing,
   saveWorkout,
@@ -40,25 +39,26 @@ const Week = ({
   onDeleteWorkout,
   onUploadAudio,
   audios,
-  onDeleteAudio,
   onCoyWorkout,
   onSelect,
   selecteds,
   pasteWorkout,
+  URL_BASE,
+  setSelectAudio,
 }: Props) => {
   return (
     <div className="week " id={`week-${week.id}`}>
       <div className="week-days" data-test="week-days">
         {week.days.map((day, index) => (
           <Day
-            truncate={truncate}
+            setSelectAudio={setSelectAudio}
+            URL_BASE={URL_BASE}
             data={data}
             loading={false}
             key={index}
             day={day}
             onCoyWorkout={onCoyWorkout}
             audios={audios}
-            onDeleteAudio={onDeleteAudio}
             isEditing={isEditing}
             setIsEditing={onEditing}
             onCreateWorkout={onCreateWorkout}

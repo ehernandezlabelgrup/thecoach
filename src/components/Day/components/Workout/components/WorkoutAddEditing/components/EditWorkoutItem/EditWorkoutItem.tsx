@@ -7,6 +7,7 @@ import {
   ICategories,
   ITypesMark,
 } from "../../../../../../../../interfaces/workout"
+import TextareaInput from "../../../../../../../TextareaInput"
 
 interface IProps {
   register: any
@@ -16,6 +17,7 @@ interface IProps {
   getValues: any
   setValue: any
   errors: any
+  URL_BASE: string
 }
 
 const EditWorkoutItem = ({
@@ -26,6 +28,7 @@ const EditWorkoutItem = ({
   getValues,
   setValue,
   errors,
+  URL_BASE,
 }: IProps) => {
   const [is_rank, setIsRank] = useState(
     getValues(`workout_items.${index}.is_ranking`) || false,
@@ -83,7 +86,7 @@ const EditWorkoutItem = ({
           </label>
           <select
             {...register(`workout_items.${index}.id_thetraktor_type_mark`)}
-            className="w-24 text-left h-full uppercase outline-none px-2 font-semibold text-xs border border-gray-300  focus:bg-blue-50 bg-white rounded py-1"
+            className="w-24 text-left !h-[25px] uppercase outline-none !px-2 !font-semibold !text-xs border border-gray-300  focus:bg-blue-50 bg-white rounded !py-1"
           >
             <option value={0}>Sin marca</option>
 
@@ -97,7 +100,7 @@ const EditWorkoutItem = ({
               {...register(`workout_items.${index}.min_result`)}
               defaultValue={0}
               placeholder="Objetivo"
-              className="w-full h-full uppercase outline-none px-2 font-semibold text-xs border border-gray-300 text-right focus:bg-blue-50 bg-white rounded py-1"
+              className="w-full !h-[25px] !leading-0 uppercase outline-none !px-2 font-semibold !text-xs border border-gray-300 text-right focus:bg-blue-50 bg-white rounded !py-1"
             />
           </div>
         </div>
@@ -105,7 +108,7 @@ const EditWorkoutItem = ({
       <div className="px-4 pt-1">
         <select
           {...register(`workout_items.${index}.id_workout_category`)}
-          className="w-full text-left h-full uppercase outline-none px-2 font-semibold text-xs border border-gray-300  focus:bg-blue-50 bg-white rounded py-1"
+          className="w-full text-left !h-[25px] !leading-0 uppercase outline-none !px-2 !font-semibold !text-xs border border-gray-300  focus:bg-blue-50 bg-white !rounded !py-1"
         >
           <option value={0}>Sin categoría</option>
 
@@ -118,7 +121,7 @@ const EditWorkoutItem = ({
 
       <div>
         <div
-          className={`flex pl-4 flex-row ${
+          className={`flex pl-4 flex-row items-center ${
             focustTitle && "border-t border-b border-blue-400"
           } ${errors?.workout_items?.[index]?.title && "bg-red-100"}`}
         >
@@ -129,29 +132,32 @@ const EditWorkoutItem = ({
             })}
             onBlur={() => setFocusTitle(false)}
             onFocus={() => setFocusTitle(true)}
-            className=" outline-none pl-2 border-none  pr-2 py-2 w-full font-bold bg-transparent  text-xs"
+            className=" !outline-none !pl-2 !border-none  !pr-2 !py-2 !w-full !font-bold !bg-transparent  !text-xs"
             placeholder="Ejercicio"
           />
         </div>
         <div className="">
-          <textarea
-            {...register(`workout_items.${index}.info`, {
-              required: true,
-            })}
-            className={`px-4 py-2 rounded-none outline-none bg-transparent border-gray-100 focus:border-t focus:border-b focus:border-blue-500 text-xs h-28 resize-none ${errors?.workout_items?.[index]?.info && "bg-red-100"}`}
-            placeholder="Sets, reps, weight, etc."
+          <TextareaInput
+            register={register}
+            name={`workout_items.${index}.info`}
+            error={errors?.workout_items?.[index]?.info}
           />
         </div>
         <div className="border-t border-gray-300">
-          <textarea
-            {...register(`workout_items.${index}.notes`)}
-            className="px-4 italic py-2 rounded-none outline-none bg-transparent border-gray-100 focus:border-t focus:border-b focus:border-blue-500 text-xs h-28 resize-none "
-            placeholder="Notas del ejercicio (opcional)"
+          <TextareaInput
+            className="italic "
+            register={register}
+            name={`workout_items.${index}.notes`}
+            error={errors?.workout_items?.[index]?.notes}
           />
         </div>
         <div className="px-4">
-          {/* @ts-ignore */}
-          <WorkoutExercise onChange={onChangeExercise} data={exercises} />
+          <WorkoutExercise
+            URL_BASE={URL_BASE}
+            /* @ts-ignore */
+            onChange={onChangeExercise}
+            data={exercises}
+          />
         </div>
       </div>
     </div>

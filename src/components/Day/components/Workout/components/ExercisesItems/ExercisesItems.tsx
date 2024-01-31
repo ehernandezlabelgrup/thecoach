@@ -5,16 +5,32 @@ import {
 } from "tw-elements-react"
 import { Exercise } from "../../../../../../interfaces/workout"
 import XMarkIcon from "../../../../../Icons/XMarkIcon"
+import { useState } from "react"
+import axios from "axios"
 
 interface Props {
   data: Exercise[]
   onDeleteExercise?: (id: number) => void
+  URL_BASE: string
 }
 
-const ExercisesItems = ({ data, onDeleteExercise }: Props) => {
+const ExercisesItems = ({ data, onDeleteExercise, URL_BASE }: Props) => {
+  const [video, setVideo] = useState<string | null>(null)
+
+  const getVideo = (id: number) => {
+    axios
+      .get(`${URL_BASE}module/thetraktor/getexercise?id=${id}`)
+      .then((response) => {
+        if (response.status === 200) {
+          setVideo(response?.data?.psdata?.video)
+        }
+        return response.data
+      })
+  }
+
   return (
     <div
-      className="tags add-tags scroll my-1"
+      className="my-1 flex flex-row gap-1 flex-wrap"
       onClick={(e) => {
         e.stopPropagation()
       }}
@@ -23,17 +39,25 @@ const ExercisesItems = ({ data, onDeleteExercise }: Props) => {
         return (
           <div
             key={exercise.id}
-            className="tag cursor-pointer tag--remove mr-1 mb-1 add-tag"
+            className="cursor-pointer bg-slate-100 rounded-full flex items-center flex-row gap-1 !text-xs"
             data-test="selected-exercise"
           >
-            <TEPopover trigger="focus">
+            <TEPopover
+              onShow={() => {
+                if (exercise.video) setVideo(exercise.video)
+                else {
+                  getVideo(exercise.id)
+                }
+              }}
+              trigger="focus"
+            >
               <div className="relative w-5">
                 <TEPopoverToggler
                   id="ember275"
                   className="tag-icon z-10 absolute top-0 left-0 exercise-preview-wrap w-4 h-4  ember-view"
                 ></TEPopoverToggler>
                 <button
-                  className="aboslute z-0 top-0 left-0 w-full h-full"
+                  className="aboslute z-0 pt-1 pl-1 top-0 left-0 w-full h-full"
                   style={{
                     userSelect: "none",
                   }}
@@ -71,18 +95,20 @@ const ExercisesItems = ({ data, onDeleteExercise }: Props) => {
                 <div className="card  bg-white  shadow ember-tether-element-inner ember-tether-element-inner--fw--m exercise-preview-form p-3">
                   <h4 className="font-bold">{exercise.name}</h4>
                   <div className="embed">
-                    <video controls className="w-full h-[300px]">
-                      <source src={exercise.video} type="video/mp4" />
-                    </video>
+                    {video && (
+                      <video controls className="w-full h-[300px]">
+                        <source src={video} type="video/mp4" />
+                      </video>
+                    )}
                   </div>
                 </div>
               </TEPopoverContent>
             </TEPopover>
-            <span className="tag-label leading-3">{exercise?.name}</span>
+            <div className="!text-[10px] !leading-3 pr-2">{exercise?.name}</div>
             {onDeleteExercise && (
               <button
                 onClick={() => onDeleteExercise(exercise.id)}
-                className="btn btn--s tag-remove"
+                className="bg-gray-200 hover:bg-gray-400 w-5 h-5 rounded-full items-center flex justify-center"
                 type="button"
               >
                 <XMarkIcon />

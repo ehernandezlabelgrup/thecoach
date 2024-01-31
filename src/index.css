@@ -610,18 +610,9 @@ svg:not(:root).svg-inline--fa {
   order: 1;
 }
 
-.bucket-content {
-  flex-grow: 1;
-  max-width: 100%;
-  min-width: 0;
-}
 
-.bucket-media {
-  flex-basis: auto;
-  flex-grow: 0;
-  flex-shrink: 0;
-  margin-right: 1.25rem;
-}
+
+
 
 .bucket-media > img {
   display: block;
@@ -738,18 +729,18 @@ svg:not(:root).svg-inline--fa {
   order: 1;
 }
 
-.bucket-content {
+/* .bucket-content {
   flex-grow: 1;
   max-width: 100%;
   min-width: 0;
-}
+} */
 
-.bucket-media {
+/* .bucket-media {
   flex-basis: auto;
   flex-grow: 0;
   flex-shrink: 0;
   margin-right: 1.25rem;
-}
+} */
 
 .bucket-media > img {
   display: block;

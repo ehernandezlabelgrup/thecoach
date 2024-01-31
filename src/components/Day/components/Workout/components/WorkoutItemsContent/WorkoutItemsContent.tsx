@@ -6,9 +6,10 @@ interface IProps {
   data: IWorkoutItem[]
   categories: ICategories[]
   id: number
+  URL_BASE: string
 }
 
-const WorkoutItemsContent = ({ data, categories, id }: IProps) => {
+const WorkoutItemsContent = ({ data, categories, id, URL_BASE }: IProps) => {
   return (
     <Droppable droppableId={`${id.toString()}`} type="workout_item">
       {(provided) => (
@@ -20,6 +21,7 @@ const WorkoutItemsContent = ({ data, categories, id }: IProps) => {
         >
           {data?.map((item, index) => (
             <WorkoutItems
+              URL_BASE={URL_BASE}
               categories={categories}
               index={index}
               key={item?.id.toString()}

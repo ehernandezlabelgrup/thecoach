@@ -191,7 +191,7 @@
 }
 
 .workout-checkbox:checked:before {
-  content: url("check.svg");
+  content: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMiIgaGVpZ2h0PSIyMCIgdmlld0JveD0iMCAwIDUxMiAzODEuODAxIj4KICA8cGF0aCBpZD0iVHJhemFkb18yMCIgZGF0YS1uYW1lPSJUcmF6YWRvIDIwIiBkPSJNMTczLjksNDM5LjQsNy41LDI3M2EyNS41OTEsMjUuNTkxLDAsMCwxLDAtMzYuMmwzNi4yLTM2LjJhMjUuNTkxLDI1LjU5MSwwLDAsMSwzNi4yLDBMMTkyLDMxMi43LDQzMi4xLDcyLjZhMjUuNTkxLDI1LjU5MSwwLDAsMSwzNi4yLDBsMzYuMiwzNi4yYTI1LjU5MSwyNS41OTEsMCwwLDEsMCwzNi4yTDIxMC4xLDQzOS40YTI1LjU5MSwyNS41OTEsMCwwLDEtMzYuMiwwWiIgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMCAtNjUuMSkiLz4KPC9zdmc+Cg==");
   height: 0.75rem;
   transform: translateY(-25%);
   width: 0.75rem;

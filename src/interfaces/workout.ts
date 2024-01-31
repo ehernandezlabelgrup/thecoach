@@ -20,6 +20,7 @@ export interface IWorkoutItem {
   is_ranking: boolean
   min_result: string
   id_thetraktor_type_mark: string
+  exercises: Exercise[]
 }
 
 export interface Exercise {

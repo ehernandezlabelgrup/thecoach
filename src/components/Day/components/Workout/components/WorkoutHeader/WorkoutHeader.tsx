@@ -18,14 +18,14 @@ const WorkoutHeader = ({
   onSelect,
 }: Props) => {
   return (
-    <div className="workout-header js--workout-header-10427706617">
+    <div className="relative px-3 pt-1 js--workout-header-10427706617">
       <div className="split split--nowrap">
         <div className="pt-1 pb-1">
-          <div className="bucket bucket--f">
+          <div className="flex items-center gap-1 flex-row">
             <div onClick={(e) => e.stopPropagation()} className="bucket-media">
               <input
                 aria-label="Select Workout"
-                className="workout-checkbox"
+                className="workout-checkbox !m-0"
                 data-test="workout-header-select-action"
                 type="checkbox"
                 checked={selected}
@@ -33,7 +33,10 @@ const WorkoutHeader = ({
               />
             </div>
             <div className="bucket-content" data-test="workout-title">
-              <div className="workout-title font-bold" title="In-Gym Workout">
+              <div
+                className="text-gray-400 pt-[2px] font-bold text-[13px]"
+                title={title}
+              >
                 {title}
               </div>
             </div>

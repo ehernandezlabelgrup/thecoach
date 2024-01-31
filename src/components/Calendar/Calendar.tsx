@@ -1,4 +1,5 @@
-import { useEffect, useState } from "react"
+/* eslint-disable @typescript-eslint/ban-ts-comment */
+import { createContext, useContext, useEffect, useState } from "react"
 import { Week as Weeks } from "../../interfaces/calendarTypes"
 import { ICategories, ITypesMark, IWorkout } from "../../interfaces/workout"
 import Week from "../Week"
@@ -8,6 +9,10 @@ import { createNewWorkout } from "../../utils/calendar"
 import axios from "axios"
 import { DragDropContext } from "react-beautiful-dnd"
 import { IAudio } from "../Audio/Audio"
+import ModalAudio from "../ModalAudio"
+import { AppContext } from "../../App"
+
+export const CalendarContext = createContext(null)
 
 interface IDragContext {
   draggableId: string
@@ -20,7 +25,6 @@ interface IDragContext {
 interface Props {
   weeks: Weeks[]
   data: IWorkout[]
-  truncate: boolean
   categories: ICategories[]
   typesMark: ITypesMark[]
   URL_BASE: string
@@ -31,16 +35,17 @@ interface Props {
 const Calendar = ({
   weeks,
   data,
-  truncate,
   categories,
   typesMark,
-  URL_BASE,
   getData,
   loadingGeneral,
 }: Props) => {
+  const { id, URL_BASE } = useContext(AppContext)
   const [workouts, setWorkouts] = useState<IWorkout[]>(data)
   const [isEditing, setIsEditing] = useState<number | null>(null)
   const [audios, setAudios] = useState<IAudio[]>([])
+
+  const [selectedAudio, setSelectAudio] = useState<IAudio | false>(false)
 
   const onChangeWorkout = (workout: IWorkout) => {
     const newData = workouts.map((item: IWorkout) => {
@@ -115,18 +120,25 @@ const Calendar = ({
       if (Number(item.is_ranking)) {
         countRanking++
       }
-
-      if (Number(item.id_thetraktor_type_mark) === 1) {
-        const regex = /^\d{2}:\d{2}$/
-        if (!regex.test(item.min_result)) {
-          toast.error("El formato de la marca es incorrecto deberia ser NN:NN")
-          isValid = false
-        }
-      } else {
-        if (Number(item.min_result) !== 0) {
-          if (!Number(item.min_result)) {
-            toast.error("La marca debe ser mayor a 0")
+      if (
+        item.min_result &&
+        item.min_result !== "0" &&
+        item.min_result !== ""
+      ) {
+        if (Number(item.id_thetraktor_type_mark) === 1) {
+          const regex = /^\d{2}:\d{2}$/
+          if (!regex.test(item.min_result)) {
+            toast.error(
+              "El formato de la marca es incorrecto deberia ser NN:NN",
+            )
             isValid = false
+          }
+        } else {
+          if (Number(item.min_result) !== 0) {
+            if (!Number(item.min_result)) {
+              toast.error("La marca debe ser mayor a 0")
+              isValid = false
+            }
           }
         }
       }
@@ -143,32 +155,33 @@ const Calendar = ({
       return
     }
 
+    const element = document.getElementById(`day-${workout.date}`)
+    // scroll to top element
+    if (element) {
+      element.scrollIntoView({ behavior: "smooth" })
+    }
+
     workout.workout_items = items
     const { data, status } = await axios.post(
-      `${URL_BASE}/module/thetraktor/program?action=workouts&id_program=1`,
+      `${URL_BASE}module/thetraktor/program?action=workouts&id_program=${id}`,
       {
         ...workout,
       },
     )
     if (status === 200) {
       if (data?.success) {
-        const { psdata } = data
         toast.success("Entrenamiento guardado")
         setIsEditing(null)
-        if (workout.id) {
-          onChangeWorkout(psdata)
-        } else {
-          setWorkouts([...workouts, psdata])
-        }
       } else {
         toast.error(data?.error)
       }
     }
+    getData()
   }
 
   const getAudios = async () => {
     const { data, status } = await axios.get(
-      `${URL_BASE}/module/thetraktor/program?action=audios&id_program=1`,
+      `${URL_BASE}module/thetraktor/program?action=audios&id_program=${id}`,
     )
     if (status === 200) {
       if (data?.success) {
@@ -181,7 +194,7 @@ const Calendar = ({
 
   const createRestDay = async (date: string) => {
     const { data, status } = await axios.post(
-      `${URL_BASE}/module/thetraktor/program?action=restday&id_program=1`,
+      `${URL_BASE}module/thetraktor/program?action=restday&id_program=${id}`,
       {
         date: date,
       },
@@ -200,7 +213,7 @@ const Calendar = ({
     const idsConverted = ids.map((id) => `ids[]=${id}`).join("&")
     setSelected([])
     const { data, status } = await axios.delete(
-      `${URL_BASE}/module/thetraktor/program?action=workouts&id_program=1&${idsConverted}`,
+      `${URL_BASE}module/thetraktor/program?action=workouts&id_program=${id}&${idsConverted}`,
     )
     await getData()
     if (status === 200) {
@@ -224,7 +237,7 @@ const Calendar = ({
 
       ids = JSON.parse(ids)
       const { data, status } = await axios.post(
-        `${URL_BASE}/module/thetraktor/program?action=paste&id_program=1`,
+        `${URL_BASE}module/thetraktor/program?action=paste&id_program=${id}`,
         {
           ids,
           date,
@@ -250,7 +263,7 @@ const Calendar = ({
       const id_workout = movable.destination.droppableId
       const id_workout_item = movable.draggableId.replace("workout_item_", "")
       const position = movable.destination.index + 1
-      const url = `${URL_BASE}/module/thetraktor/program?action=move_workout_item&id_program=1&id_workout=${id_workout}&id_workout_item=${id_workout_item}&position=${position}`
+      const url = `${URL_BASE}module/thetraktor/program?action=move_workout_item&id_program=${id}&id_workout=${id_workout}&id_workout_item=${id_workout_item}&position=${position}`
       await axios.get(url)
       await getData()
       return
@@ -266,7 +279,7 @@ const Calendar = ({
     })
     setWorkouts(filterWorkout)
     const { data, status } = await axios.get(
-      `${URL_BASE}/module/thetraktor/program?action=move_workout&id_program=1&id_workout=${
+      `${URL_BASE}module/thetraktor/program?action=move_workout&id_program=${id}&id_workout=${
         movable.draggableId
       }&date=${movable.destination.droppableId}&position=${
         Number(movable.destination.index) + 1
@@ -284,7 +297,7 @@ const Calendar = ({
     const formData = new FormData()
     formData.append("audio", file)
     const { data, status } = await axios.post(
-      `${URL_BASE}/module/thetraktor/program?action=upload_audio&id_program=1&date=${date}`,
+      `${URL_BASE}module/thetraktor/program?action=upload_audio&id_program=${id}&date=${date}`,
       formData,
     )
     if (status === 200) {
@@ -313,7 +326,12 @@ const Calendar = ({
   }, [])
 
   return (
-    <>
+    <CalendarContext.Provider
+      // @ts-ignore
+      value={{
+        pasteWorkout,
+      }}
+    >
       <DragDropContext
         onDragEnd={(res) => {
           const input = {
@@ -336,10 +354,13 @@ const Calendar = ({
         {loadingGeneral && (
           <div className="absolute h-full w-full bg-white opacity-50 z-10" />
         )}
-        <div className="calendar font-proximanova js--calendar  trainerFrame-calendar">
+        <div
+          id="calendar-weeks"
+          className="calendar font-proximanova js--calendar  trainerFrame-calendar"
+        >
           {weeks.map((week, index) => (
             <Week
-              truncate={truncate}
+              URL_BASE={URL_BASE}
               onChangeWorkout={onChangeWorkout}
               onCreateWorkout={onCreateWorkout}
               data={workouts}
@@ -355,26 +376,25 @@ const Calendar = ({
               onDeleteWorkout={onDeleteWorkout}
               onUploadAudio={onUploadAudio}
               audios={audios}
-              onDeleteAudio={onDeleteAudio}
               onCoyWorkout={onCoyWorkout}
               onSelect={onSelect}
               selecteds={selecteds}
               pasteWorkout={pasteWorkout}
+              setSelectAudio={setSelectAudio}
             />
           ))}
         </div>
       </DragDropContext>
       {selecteds && selecteds?.length > 0 && (
-        <div className="calendar__footer items-center flex flex-row px-4 justify-between  bg-slate-200 h-[120px] w-full">
+        <div className="items-center flex flex-row px-4 justify-between  bg-slate-200 h-[140px] w-full">
           <div className="flex flex-row">
-            <div className="text-sm font-bold">
+            <div className="text-sm font-bold !px-4 !py-2">
               {selecteds?.length} seleccionados
             </div>
             <div>
-              {" "}
               <button
                 onClick={() => setSelected([])}
-                className="btn hover:underline text-xs cursor-pointer  text-slate-500 btn--primary px-4"
+                className="btn hover:!underline text-xs cursor-pointer  text-slate-500 btn--primary !py-2 !px-4"
               >
                 Limpiar seleccionados
               </button>
@@ -389,7 +409,7 @@ const Calendar = ({
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 24 24"
-                className="w-6 h-6 fill-slate-600"
+                className="w-5 h-5 fill-slate-600"
               >
                 <path
                   fillRule="evenodd"
@@ -405,7 +425,7 @@ const Calendar = ({
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 24 24"
-                className="w-6 h-6 fill-red-500"
+                className="w-5 h-5 fill-red-500"
               >
                 <path
                   fillRule="evenodd"
@@ -417,7 +437,13 @@ const Calendar = ({
           </div>
         </div>
       )}
-    </>
+
+      <ModalAudio
+        onDeleteAudio={onDeleteAudio}
+        setSelectAudio={() => setSelectAudio(false)}
+        audio={selectedAudio}
+      />
+    </CalendarContext.Provider>
   )
 }
 

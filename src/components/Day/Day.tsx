@@ -14,7 +14,6 @@ interface Props {
   loading: boolean
   day: DayProps
   data: IWorkout[]
-  truncate: boolean
   onCreateWorkout: (date: string) => void
   isEditing: number | null
   setIsEditing: (id: number | null, isEditing: boolean) => void
@@ -29,13 +28,13 @@ interface Props {
   onSelect: (id: number) => void
   selecteds: number[]
   pasteWorkout: (date: string) => void
-  onDeleteAudio: (date: string) => void
+  URL_BASE: string
+  setSelectAudio: (audio: IAudio) => void
 }
 const Day = ({
   loading,
   day,
   data,
-  truncate,
   onCreateWorkout,
   isEditing,
   setIsEditing,
@@ -50,6 +49,8 @@ const Day = ({
   onSelect,
   selecteds,
   pasteWorkout,
+  URL_BASE,
+  setSelectAudio,
 }: Props) => {
   const workout = useMemo(() => {
     return data?.filter((workout: IWorkout) => workout.date === day.date)
@@ -69,6 +70,7 @@ const Day = ({
         workout.find((w) => Number(w.id) === Number(isEditing)) && "is-active"
       }  is-small`}
       data-test="week-day"
+      id={`day-${day.date}`}
     >
       <DayTopRow
         pasteWorkout={pasteWorkout}
@@ -76,6 +78,7 @@ const Day = ({
         onUploadAudio={onUploadAudio}
         name={name}
         date={day.date}
+        setSelectAudio={setSelectAudio}
       />
 
       <Droppable droppableId={day.date} type="workout">
@@ -101,11 +104,11 @@ const Day = ({
                   />
                 ) : (
                   <Workout
+                    URL_BASE={URL_BASE}
                     onSelect={() => onSelect(workout?.id)}
                     selected={selecteds.includes(workout?.id)}
                     onCoyWorkout={onCoyWorkout}
                     index={index}
-                    truncate={truncate}
                     onSave={saveWorkout}
                     key={workout.id}
                     isEditing={Number(workout.id) === Number(isEditing)}
@@ -120,6 +123,7 @@ const Day = ({
               )
             ) : (
               <DayEmpty
+                date={day.date}
                 createRestDay={() => createRestDay(day.date)}
                 onCreateWorkout={() => onCreateWorkout(day.date)}
               />

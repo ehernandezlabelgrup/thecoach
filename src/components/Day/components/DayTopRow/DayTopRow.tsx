@@ -7,15 +7,15 @@ const DayTopRow = ({
   date,
   onUploadAudio,
   audio,
-  onDeleteAudio,
   pasteWorkout,
+  setSelectAudio,
 }: {
   name: string
   date: string
   onUploadAudio: (date: string, file: File) => void
   audio: IAudio | undefined
-  onDeleteAudio?: (date: string) => void
   pasteWorkout: (date: string) => void
+  setSelectAudio: (audio: IAudio) => void
 }) => {
   const isToday = dayjs().format("YYYY-MM-DD") === date
   return (
@@ -25,12 +25,10 @@ const DayTopRow = ({
       style={{ top: "-1px" }}
     >
       <div className="flex flex-row gap-5">
-        {audio && onDeleteAudio && (
-          <Audio audio={audio} onDeleteAudio={() => onDeleteAudio(date)} />
-        )}
+        {audio && <Audio setSelectAudio={setSelectAudio} audio={audio} />}
       </div>
-      <ul className="flex flex-row gap-1 items-center">
-        <li className="cursor-pointer">
+      <div className="flex flex-row gap-1 items-center">
+        <div className="cursor-pointer">
           <div className="law paste-workout ">
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -45,8 +43,8 @@ const DayTopRow = ({
               />
             </svg>
           </div>
-        </li>
-        <li onClick={() => pasteWorkout(date)} className="cursor-pointer">
+        </div>
+        <div onClick={() => pasteWorkout(date)} className="cursor-pointer">
           <div className="law paste-workout">
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -65,8 +63,8 @@ const DayTopRow = ({
               />
             </svg>
           </div>
-        </li>
-        <li className="cursor-pointer">
+        </div>
+        <div className="cursor-pointer">
           <label htmlFor={`audio-${date}`} className="law paste-workout">
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -89,8 +87,8 @@ const DayTopRow = ({
               className="hidden"
             />
           </label>
-        </li>
-        <li className="tc-list-item">
+        </div>
+        <div className="tc-list-item">
           <div
             className="law day-date cursor-pointer"
             data-test="set-active-day"
@@ -102,8 +100,8 @@ const DayTopRow = ({
               {name}
             </span>
           </div>
-        </li>
-      </ul>
+        </div>
+      </div>
     </div>
   )
 }

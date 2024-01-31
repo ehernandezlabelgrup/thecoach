@@ -3,8 +3,9 @@ import CalendarDayActions from "../../../CalendarDayActions"
 interface Props {
   createRestDay: () => void
   onCreateWorkout: () => void
+  date: string
 }
-const DayEmpty = ({ onCreateWorkout, createRestDay }: Props) => {
+const DayEmpty = ({ onCreateWorkout, createRestDay, date }: Props) => {
   return (
     <div
       id="ember311"
@@ -15,6 +16,7 @@ const DayEmpty = ({ onCreateWorkout, createRestDay }: Props) => {
         className="day-target draggable-object-target ember-view"
       >
         <CalendarDayActions
+          date={date}
           createRestDay={createRestDay}
           onCreateWorkout={onCreateWorkout}
         />

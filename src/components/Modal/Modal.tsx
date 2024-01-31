@@ -17,6 +17,7 @@ interface IProps {
 const Modal = ({ visible, onRequestClose, children, onAccept }: IProps) => {
   return (
     <TEModal
+      zIndex={9999}
       show={visible}
       setShow={onRequestClose ? onRequestClose : () => null}
     >

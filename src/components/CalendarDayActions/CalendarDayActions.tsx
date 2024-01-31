@@ -1,11 +1,17 @@
+/* eslint-disable @typescript-eslint/ban-ts-comment */
+import { useContext } from "react"
 import PlusIcon from "../Icons/PlusIcon"
+import { CalendarContext } from "../Calendar/Calendar"
 
 interface IProps {
   onCreateWorkout: () => void
   createRestDay: () => void
+  date: string
 }
 
-function CalendarDayActions({ onCreateWorkout, createRestDay }: IProps) {
+function CalendarDayActions({ onCreateWorkout, createRestDay, date }: IProps) {
+  // @ts-ignore
+  const { pasteWorkout } = useContext(CalendarContext)
   return (
     <div className="bubble" data-test="calendar-day-actions">
       <div
@@ -39,6 +45,7 @@ function CalendarDayActions({ onCreateWorkout, createRestDay }: IProps) {
       </div>
 
       <div
+        onClick={() => pasteWorkout(date)}
         className="bubble-item basis-1/3 ember-tooltip-target"
         data-test="paste-workouts"
       >

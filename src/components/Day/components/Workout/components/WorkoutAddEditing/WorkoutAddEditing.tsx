@@ -20,6 +20,7 @@ interface Props {
   typesMark: ITypesMark[]
   categories: ICategories[]
   onDelete: () => void
+  URL_BASE: string
 }
 
 /**
@@ -34,6 +35,7 @@ const WorkoutAddEditing: React.FC<Props> = ({
   typesMark,
   categories,
   onDelete,
+  URL_BASE,
 }) => {
   const [workoutItems, setWorkoutItems] = React.useState<
     IWorkoutItem[] | undefined
@@ -91,43 +93,39 @@ const WorkoutAddEditing: React.FC<Props> = ({
         id="ember755"
         className={`js-draggableObject draggable-object ember-view ${errors?.title && "bg-red-100"}`}
       >
-        <div className="row row--o row--m split split--nowrap pt-4">
-          <div className="pr-1">
-            <div className="bucket bucket--flag bucket--f">
-              <div className="bucket-content">
-                <span className="text-sm font-bold text-blue-300"></span>
-                <input
-                  {...register("title", {
-                    required: true,
-                  })}
-                  aria-label="Workout Title Input"
-                  className="addInput addInput--title js--focus"
-                  data-test="workout-title"
-                  placeholder="Título (opcional)"
-                  spellCheck="false"
-                  type="text"
-                />
-              </div>
-            </div>
-          </div>
-        </div>
+        <input
+          {...register("title", {
+            required: true,
+          })}
+          aria-label="Workout Title Input"
+          className="!border-0 outline-none !px-4 font-bold !text-[14px] !py-[9px]"
+          data-test="workout-title"
+          placeholder="Título (opcional)"
+          spellCheck="false"
+          type="text"
+        />
       </div>
-      <div id="ember758" className="row row--o row--m my-3 ember-view">
+      <div id="ember758" className="my-1">
         <div className="split prnt-warmup" data-print="warmup">
           <div>
             <textarea
               {...register("warmup")}
               spellCheck="false"
-              placeholder="Warmup"
-              id="ember759"
-              className="ember-text-area font-[400] text-xs ember-view addInput addInput--base addInput--textarea autoExpand"
+              placeholder="Calentamiento"
+              className="resize-none border border-transparent outline-none rounded-none focus:border-t focus:border-b focus:border-blue-400 !w-full !px-4 hover:!bg-transparent active:!bg-transparent focus:!bg-transparent !text-[12px]  "
               aria-label="Warmup"
               data-test="type-textarea"
               style={{ height: "56px" }}
             />
           </div>
         </div>
-        <WorkoutExercise onChange={onChangeExercise} data={data?.exercises} />
+        <div className="px-4">
+          <WorkoutExercise
+            URL_BASE={URL_BASE}
+            onChange={onChangeExercise}
+            data={data?.exercises}
+          />
+        </div>
       </div>
       <div className="workouts-items bg-gray-50 relative">
         {workoutItems?.map((item, index) => (
@@ -142,11 +140,12 @@ const WorkoutAddEditing: React.FC<Props> = ({
               getValues={getValues}
               setValue={setValue}
               errors={errors}
+              URL_BASE={URL_BASE}
             />
             {index > 0 && (
               <div
                 onClick={() => onDeleteWorkoutItem(item.id)}
-                className="absolute h-10 shadow items-center justify-center flex z-10 w-7 rounded cursor-pointer top-[100px] -left-4 bg-red-500"
+                className="absolute h-8 shadow items-center justify-center flex z-10 w-5 rounded cursor-pointer top-[100px] -left-2 bg-red-500"
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -154,7 +153,7 @@ const WorkoutAddEditing: React.FC<Props> = ({
                   viewBox="0 0 24 24"
                   strokeWidth={1.5}
                   stroke="white"
-                  className="w-5 h-5"
+                  className="w-4 h-4"
                 >
                   <path
                     strokeLinecap="round"
@@ -168,7 +167,7 @@ const WorkoutAddEditing: React.FC<Props> = ({
         ))}
         <div
           onClick={addWorkoutItem}
-          className="bg-gray-300 flex flex-row items-center gap-1 uppercase absolute rounded px-2 left-[90px] cursor-pointer text-xs font-bold py-1 -bottom-3"
+          className="bg-gray-300 flex flex-row items-center gap-1 uppercase absolute rounded px-2 left-[90px] cursor-pointer text-xs font-bold py-1 -bottom-6"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -230,20 +229,20 @@ const WorkoutAddEditing: React.FC<Props> = ({
           <div className="flex flex-row gap-1">
             <button
               onClick={handleSubmit(onSubmit)}
-              className="text-xs bg-blue-400 rounded px-2 py-1 text-white"
+              className="!text-xs !bg-blue-400 !rounded !px-2 !py-1 text-white"
               data-test="save-button"
               type="button"
             >
-              Save
+              Guardar
             </button>
 
             <button
               onClick={onCanceled}
-              className="text-xs rounded px-2 py-1 text-dark"
+              className="!text-xs !rounded !px-2 !py-1 !text-dark"
               data-test="cancel-button"
               type="button"
             >
-              Cancel
+              Cancelar
             </button>
           </div>
 

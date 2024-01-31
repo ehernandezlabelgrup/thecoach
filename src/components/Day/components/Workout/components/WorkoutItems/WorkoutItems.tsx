@@ -1,60 +1,56 @@
-import { useMemo } from "react"
+import { useContext, useMemo } from "react"
 import { ICategories, IWorkoutItem } from "../../../../../../interfaces/workout"
 import { Draggable } from "react-beautiful-dnd"
+import ExercisesItems from "../ExercisesItems"
+import WorktoutTextSplit from "../WorktoutTextSplit"
+import { AppContext } from "../../../../../../App"
 
 interface Props {
   data: IWorkoutItem
   index: number
   categories: ICategories[]
+  URL_BASE: string
 }
 
-const WorkoutItems = ({ data, index, categories }: Props) => {
+const WorkoutItems = ({ data, index, categories, URL_BASE }: Props) => {
+  const { truncate } = useContext(AppContext)
   const renderIconType = (type: string) => {
     if (Number(type) === 1) {
       return (
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          fill="none"
-          viewBox="0 0 24 24"
-          strokeWidth={1.5}
-          stroke="rgb(74 222 128 / 100%)"
-          className="w-4 h-4"
-        >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
-          />
-        </svg>
+        <div className="font-bold uppercase text-[10px] pt-1 px-1">Tiempo</div>
       )
     }
     if (Number(type) === 2) {
       return (
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          fill="none"
-          viewBox="0 0 24 24"
-          strokeWidth={1.5}
-          stroke="rgb(74 222 128 / 100%)"
-          className="w-4 h-4"
-        >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            d="M19.5 12c0-1.232-.046-2.453-.138-3.662a4.006 4.006 0 0 0-3.7-3.7 48.678 48.678 0 0 0-7.324 0 4.006 4.006 0 0 0-3.7 3.7c-.017.22-.032.441-.046.662M19.5 12l3-3m-3 3-3-3m-12 3c0 1.232.046 2.453.138 3.662a4.006 4.006 0 0 0 3.7 3.7 48.656 48.656 0 0 0 7.324 0 4.006 4.006 0 0 0 3.7-3.7c.017-.22.032-.441.046-.662M4.5 12l3 3m-3-3-3 3"
-          />
-        </svg>
+        <div className="font-bold uppercase text-[10px] pt-1 px-1">reps</div>
+
+        // <svg
+        //   xmlns="http://www.w3.org/2000/svg"
+        //   fill="none"
+        //   viewBox="0 0 24 24"
+        //   strokeWidth={1.5}
+        //   stroke="rgb(74 222 128 / 100%)"
+        //   className="w-4 h-4"
+        // >
+        //   <path
+        //     strokeLinecap="round"
+        //     strokeLinejoin="round"
+        //     d="M19.5 12c0-1.232-.046-2.453-.138-3.662a4.006 4.006 0 0 0-3.7-3.7 48.678 48.678 0 0 0-7.324 0 4.006 4.006 0 0 0-3.7 3.7c-.017.22-.032.441-.046.662M19.5 12l3-3m-3 3-3-3m-12 3c0 1.232.046 2.453.138 3.662a4.006 4.006 0 0 0 3.7 3.7 48.656 48.656 0 0 0 7.324 0 4.006 4.006 0 0 0 3.7-3.7c.017-.22.032-.441.046-.662M4.5 12l3 3m-3-3-3 3"
+        //   />
+        // </svg>
       )
     }
     if (Number(type) === 3) {
       return (
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          className="w-4 h-4"
-          viewBox="0 0 24 24"
-        >
-          <path d="m16.2 10.7.6-2.4c.1-.3.5-1.7-.3-2.9-.6-.9-1.8-1.4-3.5-1.4h-2c-1.7 0-2.9.5-3.5 1.4-.8 1.2-.4 2.5-.3 2.9l.6 2.4c-1.1 1.1-1.8 2.6-1.8 4.3 0 2.1 1.1 3.9 2.7 5h6.6c1.6-1.1 2.7-2.9 2.7-5 0-1.7-.7-3.2-1.8-4.3m-6.6-1.2-.5-1.7v-.1s-.2-.7.1-1.1c.2-.4.8-.6 1.8-.6h2c.9 0 1.6.2 1.9.5.3.4.1 1.1.1 1.1l-.5 1.9c-.8-.3-1.6-.5-2.5-.5s-1.7.2-2.4.5z" />
-        </svg>
+        <div className="font-bold uppercase text-[10px] pt-1 px-1">Peso</div>
+
+        // <svg
+        //   xmlns="http://www.w3.org/2000/svg"
+        //   className="w-4 h-4"
+        //   viewBox="0 0 24 24"
+        // >
+        //   <path d="m16.2 10.7.6-2.4c.1-.3.5-1.7-.3-2.9-.6-.9-1.8-1.4-3.5-1.4h-2c-1.7 0-2.9.5-3.5 1.4-.8 1.2-.4 2.5-.3 2.9l.6 2.4c-1.1 1.1-1.8 2.6-1.8 4.3 0 2.1 1.1 3.9 2.7 5h6.6c1.6-1.1 2.7-2.9 2.7-5 0-1.7-.7-3.2-1.8-4.3m-6.6-1.2-.5-1.7v-.1s-.2-.7.1-1.1c.2-.4.8-.6 1.8-.6h2c.9 0 1.6.2 1.9.5.3.4.1 1.1.1 1.1l-.5 1.9c-.8-.3-1.6-.5-2.5-.5s-1.7.2-2.4.5z" />
+        // </svg>
       )
     }
 
@@ -78,6 +74,7 @@ const WorkoutItems = ({ data, index, categories }: Props) => {
     >
       {(provided) => (
         <div
+          className="hover:bg-gray-50"
           ref={provided.innerRef}
           {...provided.draggableProps}
           {...provided.dragHandleProps}
@@ -85,21 +82,17 @@ const WorkoutItems = ({ data, index, categories }: Props) => {
           <div
             draggable="true"
             id="ember906"
-            className="select-none is-disabled js-draggableObject draggable-object ember-view"
+            className="select-none  is-disabled js-draggableObject draggable-object ember-view"
           >
-            <div className="exercise bucket bucket--f bucket--base">
-              <div className="bucket-media cursor-move">
-                {/* Content for bucket-media if needed */}
-              </div>
+            <div className="px-4  pb-2 pt-2">
               <div className="exercise-content bucket-content">
                 <div className="additional-data flex gap-1 flex-row">
                   {data?.is_ranking && (
-                    <div className="bg-blue-100 w-5 h-5 p-1 rounded">
+                    <div className="bg-yellow-200 w-5 h-5 p-1 rounded">
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
                         viewBox="0 0 24 24"
-                        fill="rgb(96 165 250 / 100%)"
-                        className="w-3 h-3"
+                        className="w-3 h-3 fill-yellow-400"
                       >
                         <path
                           fillRule="evenodd"
@@ -109,43 +102,47 @@ const WorkoutItems = ({ data, index, categories }: Props) => {
                       </svg>
                     </div>
                   )}
-                  {Number(data?.id_thetraktor_type_mark) !== 0 && (
-                    <div className="bg-green-100 w-5 h-5 rounded items-center justify-center flex">
+                  {!truncate && Number(data?.id_thetraktor_type_mark) !== 0 && (
+                    <div className="bg-green-100 h-5 rounded items-center justify-center flex">
                       {renderIconType(data?.id_thetraktor_type_mark)}
                     </div>
                   )}
-                  {data?.min_result !== "0" && (
+                  {!truncate && data?.min_result !== "0" && (
                     <div>
-                      <div className=" whitespace-nowrap rounded bg-red-400 text-center align-baseline text-xs h-5 px-1 items-center flex font-bold text-white">
+                      <div className=" whitespace-nowrap rounded bg-red-100 text-center align-baseline text-[10px] h-5 px-1 items-center flex font-bold text-red-500">
                         {data?.min_result}
                       </div>
                     </div>
                   )}
                 </div>
-                {category && (
+                {!truncate && category && (
                   <div className="flex my-1">
-                    <div className="bg-yellow-200 rounded px-3 py-[1px] uppercase text-xs font-bold text-center">
+                    <div className="bg-gray-100 text-gray-400 rounded px-2 py-[1px] uppercase text-[10px] font-bold text-center">
                       {category?.name}
                     </div>
                   </div>
                 )}
-                <div
-                  className="exercise-title font-bold"
-                  data-test="exercise-title"
-                >
+                <div className="font-bold !text-[12px]">
                   {letter}) {data?.name}
                 </div>
-                <ul className="tc-list tc-list--f">
-                  <li className="tc-list-item exercise-desc">{data?.info}</li>
-                </ul>
-                {data?.notes && (
-                  <div className="border-t text-xs text-gray-400 mt-2 border-slate-200">
-                    {data.notes}
+                {data?.info && (
+                  <div className="mt-1">
+                    <WorktoutTextSplit text={data?.info} />
+                  </div>
+                )}
+                {!truncate && data?.notes && (
+                  <div className="border-t mt-2 pt-2 border-slate-200">
+                    <WorktoutTextSplit className="italic" text={data?.notes} />
                   </div>
                 )}
               </div>
             </div>
           </div>
+          {!truncate && data?.exercises && (
+            <div className="px-4">
+              <ExercisesItems URL_BASE={URL_BASE} data={data?.exercises} />
+            </div>
+          )}
         </div>
       )}
     </Draggable>

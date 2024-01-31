@@ -8,6 +8,7 @@ import ExercisesItems from "../ExercisesItems"
 interface Props {
   data: Exercise[]
   onChange: (exercises: Exercise) => void
+  URL_BASE: string
 }
 
 export interface IExecercises {
@@ -16,7 +17,7 @@ export interface IExecercises {
   video: string
 }
 
-const WorkoutExercise = ({ data, onChange }: Props) => {
+const WorkoutExercise = ({ data, onChange, URL_BASE }: Props) => {
   const [exercises, setExercises] = useState<Exercise[]>(data || [])
   const [value, setValue] = useState("")
   const timer = useRef<NodeJS.Timeout | null>(null)
@@ -30,7 +31,7 @@ const WorkoutExercise = ({ data, onChange }: Props) => {
     timer.current = setTimeout(() => {
       axios
         .get(
-          "https://pre.thetraktor.app/module/thetraktor/getallexercises?per_page=40&name=" +
+          `${URL_BASE}module/thetraktor/getallexercises?per_page=40&name=` +
             value,
         )
         .then((response) => {
@@ -78,8 +79,8 @@ const WorkoutExercise = ({ data, onChange }: Props) => {
   return (
     <>
       <div id="ember760" className="prnt-hide ember-view">
-        <div className="split split--flag font-light pillar pillar--t pillar--xs mt-1">
-          <div className="text-xs">
+        <div className="!font-light mt-1 flex flex-row justify-between">
+          <div className="!text-xs flex-1">
             <MentionsInput
               singleLine
               value={value}
@@ -92,6 +93,7 @@ const WorkoutExercise = ({ data, onChange }: Props) => {
                   paddingLeft: 0,
                   fontSize: 11,
                   outline: "none",
+                  height: "23px",
                 },
                 suggestions: {
                   list: {
@@ -149,7 +151,11 @@ const WorkoutExercise = ({ data, onChange }: Props) => {
             </div>
           </div>
         </div>
-        <ExercisesItems data={exercises} onDeleteExercise={deleteExercise} />
+        <ExercisesItems
+          URL_BASE={URL_BASE}
+          data={exercises}
+          onDeleteExercise={deleteExercise}
+        />
       </div>
     </>
   )

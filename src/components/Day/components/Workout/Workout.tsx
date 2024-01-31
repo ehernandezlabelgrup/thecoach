@@ -4,13 +4,14 @@ import {
   IWorkout,
 } from "../../../../interfaces/workout"
 import WorkoutHeader from "./components/WorkoutHeader"
-import WorkoutWarmUp from "./components/WorkoutWarmUp"
 import "./styles.css"
 import WorkoutAddEditing from "./components/WorkoutAddEditing"
 import ExercisesItems from "./components/ExercisesItems"
 import WorktoutTextSplit from "./components/WorktoutTextSplit"
 import { Draggable } from "react-beautiful-dnd"
 import WorkoutItemsContent from "./components/WorkoutItemsContent"
+import { useContext } from "react"
+import { AppContext } from "../../../../App"
 
 interface Props {
   data: IWorkout
@@ -18,7 +19,6 @@ interface Props {
   onClick: () => void
   onCanceled: () => void
   onSave: (workout: IWorkout) => void
-  truncate: boolean
   typesMark: ITypesMark[]
   categories: ICategories[]
   onDelete: () => void
@@ -26,6 +26,7 @@ interface Props {
   onCoyWorkout: (id: number) => void
   selected: boolean
   onSelect: (id: number) => void
+  URL_BASE: string
 }
 
 const Workout = ({
@@ -34,7 +35,6 @@ const Workout = ({
   onClick,
   onCanceled,
   onSave,
-  truncate,
   typesMark,
   categories,
   onDelete,
@@ -42,7 +42,9 @@ const Workout = ({
   onCoyWorkout,
   selected,
   onSelect,
+  URL_BASE,
 }: Props) => {
+  const { truncate } = useContext(AppContext)
   if (isEditing)
     return (
       <WorkoutAddEditing
@@ -52,6 +54,7 @@ const Workout = ({
         onCanceled={onCanceled}
         onSave={onSave}
         onDelete={onDelete}
+        URL_BASE={URL_BASE}
       />
     )
   return (
@@ -75,24 +78,35 @@ const Workout = ({
               provided={provided}
               title={data.title}
             />
-            <div className="law workout-contents">
-              <div className="row row--s">
-                {data?.warmup && <WorkoutWarmUp warmup={data?.warmup} />}
-                {!truncate && <ExercisesItems data={data?.exercises} />}
+            <div className="">
+              <div className="px-3">
+                {!truncate && data?.warmup && (
+                  <div className="border-b border-gray-200 pb-1 mb-3">
+                    <WorktoutTextSplit
+                      className="text-gray-400"
+                      slipt={false}
+                      text={data?.warmup}
+                    />
+                  </div>
+                )}
+                {!truncate && (
+                  <ExercisesItems URL_BASE={URL_BASE} data={data?.exercises} />
+                )}
               </div>
 
               <WorkoutItemsContent
                 categories={categories}
                 id={data?.id}
                 data={data?.workout_items}
+                URL_BASE={URL_BASE}
               />
 
-              {data?.cooldown && (
+              {!truncate && data?.cooldown && (
                 <div className="row row--s">
                   <WorktoutTextSplit text={data?.cooldown} />
                 </div>
               )}
-              {data?.notes && (
+              {!truncate && data?.notes && (
                 <div className="row row--s">
                   <WorktoutTextSplit text={data?.notes} />
                 </div>
