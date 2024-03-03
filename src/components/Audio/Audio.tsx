@@ -1,6 +1,8 @@
 export interface IAudio {
   audio_url: string
   date: string
+  id?: number
+  title?: string
 }
 
 interface IProps {

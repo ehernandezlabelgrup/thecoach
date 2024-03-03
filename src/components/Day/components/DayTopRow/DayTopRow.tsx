@@ -9,6 +9,7 @@ const DayTopRow = ({
   audio,
   pasteWorkout,
   setSelectAudio,
+  onCreateWorkout,
 }: {
   name: string
   date: string
@@ -16,6 +17,7 @@ const DayTopRow = ({
   audio: IAudio | undefined
   pasteWorkout: (date: string) => void
   setSelectAudio: (audio: IAudio) => void
+  onCreateWorkout: () => void
 }) => {
   const isToday = dayjs().format("YYYY-MM-DD") === date
   return (
@@ -28,7 +30,7 @@ const DayTopRow = ({
         {audio && <Audio setSelectAudio={setSelectAudio} audio={audio} />}
       </div>
       <div className="flex flex-row gap-1 items-center">
-        <div className="cursor-pointer">
+        <button onClick={onCreateWorkout} className="cursor-pointer">
           <div className="law paste-workout ">
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -43,7 +45,7 @@ const DayTopRow = ({
               />
             </svg>
           </div>
-        </div>
+        </button>
         <div onClick={() => pasteWorkout(date)} className="cursor-pointer">
           <div className="law paste-workout">
             <svg

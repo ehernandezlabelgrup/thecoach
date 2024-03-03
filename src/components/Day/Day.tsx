@@ -53,7 +53,9 @@ const Day = ({
   setSelectAudio,
 }: Props) => {
   const workout = useMemo(() => {
-    return data?.filter((workout: IWorkout) => workout.date === day.date)
+    return data
+      ?.filter((workout: IWorkout) => workout.date === day.date)
+      .sort((a, b) => a.position - b.position)
   }, [data])
 
   const name = `${day.dayName} ${day.dayNumber}`
@@ -79,6 +81,7 @@ const Day = ({
         name={name}
         date={day.date}
         setSelectAudio={setSelectAudio}
+        onCreateWorkout={() => onCreateWorkout(day.date)}
       />
 
       <Droppable droppableId={day.date} type="workout">

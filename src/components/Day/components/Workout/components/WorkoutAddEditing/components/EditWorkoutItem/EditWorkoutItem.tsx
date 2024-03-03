@@ -141,6 +141,8 @@ const EditWorkoutItem = ({
             register={register}
             name={`workout_items.${index}.info`}
             error={errors?.workout_items?.[index]?.info}
+            placeholder="Sets, reps, weight, etc."
+            required={true}
           />
         </div>
         <div className="border-t border-gray-300">
@@ -149,6 +151,7 @@ const EditWorkoutItem = ({
             register={register}
             name={`workout_items.${index}.notes`}
             error={errors?.workout_items?.[index]?.notes}
+            placeholder="Notas del entrenamiento"
           />
         </div>
         <div className="px-4">

@@ -15,7 +15,7 @@ export const AppContext = createContext({
   id: 0,
   typesMark: [] as ITypesMark[],
   categories: [] as ICategories[],
-  truncate: false,
+  truncate: true,
 })
 
 interface IProps {
@@ -27,7 +27,7 @@ const App = ({ id, URL_BASE }: IProps) => {
   const [loading, setLoading] = useState<boolean>(false)
   const [date, setDate] = useState<Date>(new Date())
   const [weeks, setWeeks] = useState<Week[]>([])
-  const [truncate, setTruncate] = useState<boolean>(false)
+  const [truncate, setTruncate] = useState<boolean>(true)
 
   const [workouts, setWorkouts] = useState<IWorkout[]>([])
 

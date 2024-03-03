@@ -112,7 +112,7 @@ const WorkoutAddEditing: React.FC<Props> = ({
               {...register("warmup")}
               spellCheck="false"
               placeholder="Calentamiento"
-              className="resize-none border border-transparent outline-none rounded-none focus:border-t focus:border-b focus:border-blue-400 !w-full !px-4 hover:!bg-transparent active:!bg-transparent focus:!bg-transparent !text-[12px]  "
+              className="!px-4 !py-2 !rounded-none text-gray-400 !outline-none !bg-transparent !border-gray-100 focus:!border-t focus:!border-b focus:!border-blue-500 !text-[12px] !h-28 !resize-none undefined "
               aria-label="Warmup"
               data-test="type-textarea"
               style={{ height: "56px" }}

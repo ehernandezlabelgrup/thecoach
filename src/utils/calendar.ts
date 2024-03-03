@@ -73,7 +73,7 @@ export const createNewWorkout = (date: string, workouts: IWorkout[]) => {
         id: -1,
       },
     ],
-    position: count + 1,
+    position: count,
   }
   const newData = [...workouts, newWorkout]
   return newData

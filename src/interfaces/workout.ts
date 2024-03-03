@@ -8,6 +8,7 @@ export interface IWorkout {
   exercises: Exercise[]
   rest_day?: boolean
   notes?: string
+  position: number
 }
 
 export interface IWorkoutItem {

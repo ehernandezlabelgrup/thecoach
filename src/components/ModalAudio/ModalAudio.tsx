@@ -1,18 +1,26 @@
 import React, { useEffect } from "react"
 import Modal from "../Modal"
 import { IAudio } from "../Audio/Audio"
+import Button from "../Button"
 
 interface IProps {
   audio: IAudio | false
-  onDeleteAudio: (date: string) => void
+  onDeleteAudio: (audio: IAudio) => void
   setSelectAudio: () => void
+  updateAudio: (audio: IAudio) => void
 }
 
-const ModalAudio = ({ audio, onDeleteAudio, setSelectAudio }: IProps) => {
+const ModalAudio = ({
+  audio,
+  onDeleteAudio,
+  setSelectAudio,
+  updateAudio,
+}: IProps) => {
   const ref = React.useRef<HTMLAudioElement>(null)
   const [showAudio, setShowAudio] = React.useState(false)
   const [showModalDelete, setShowModalDelete] = React.useState(false)
   const [isPlaying, setIsPlaying] = React.useState(false)
+  const [title, setTitle] = React.useState((audio && audio?.title) || "")
 
   const stopAudio = () => {
     const audio = ref.current
@@ -26,6 +34,16 @@ const ModalAudio = ({ audio, onDeleteAudio, setSelectAudio }: IProps) => {
   useEffect(() => {
     if (audio) setShowAudio(true)
   }, [audio && audio?.date])
+
+  useEffect(() => {
+    if (showAudio) {
+      if (audio) {
+        setTitle(audio?.title || "")
+      }
+    } else {
+      setTitle("")
+    }
+  }, [showAudio])
 
   // Efecto para detectar cuando el audio termina
   useEffect(() => {
@@ -43,42 +61,52 @@ const ModalAudio = ({ audio, onDeleteAudio, setSelectAudio }: IProps) => {
   // Función para eliminar el audio
   const handleDeleteAudio = () => {
     if (isPlaying) {
-      stopAudio() // Detiene el audio si está en reproducción
+      stopAudio()
     }
     if (audio) {
-      if (onDeleteAudio) onDeleteAudio(audio.date) // Llama a la función pasada por props para eliminar el audio
+      if (onDeleteAudio) onDeleteAudio(audio)
     }
   }
 
   return (
     <>
       <Modal
+        textAccept="Guardar"
         visible={showAudio}
         onRequestClose={() => {
           setSelectAudio()
           setShowAudio(false)
         }}
+        onAccept={() => {
+          if (audio) {
+            updateAudio({
+              ...audio,
+              title,
+            })
+            setShowAudio(false)
+            setSelectAudio()
+          }
+        }}
       >
         <div className="flex items-center justify-between">
-          {audio && <audio controls ref={ref} src={audio?.audio_url} />}
-          <button
+          <div className="gap-3 flex flex-col">
+            <input
+              value={title}
+              onChange={(e) => setTitle(e.target.value)}
+              className="h-[38px] px-4 bg-gray-100 outline-none"
+              placeholder="titulo del audio"
+            />
+
+            {audio && <audio controls ref={ref} src={audio?.audio_url} />}
+          </div>
+          <Button
+            mode="alert"
             onClick={() => {
-              setShowModalDelete(true)
+              handleDeleteAudio()
               setShowAudio(false)
             }}
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 24 24"
-              className="w-6 h-6 fill-red-500"
-            >
-              <path
-                fillRule="evenodd"
-                d="M16.5 4.478v.227a48.816 48.816 0 0 1 3.878.512.75.75 0 1 1-.256 1.478l-.209-.035-1.005 13.07a3 3 0 0 1-2.991 2.77H8.084a3 3 0 0 1-2.991-2.77L4.087 6.66l-.209.035a.75.75 0 0 1-.256-1.478A48.567 48.567 0 0 1 7.5 4.705v-.227c0-1.564 1.213-2.9 2.816-2.951a52.662 52.662 0 0 1 3.369 0c1.603.051 2.815 1.387 2.815 2.951Zm-6.136-1.452a51.196 51.196 0 0 1 3.273 0C14.39 3.05 15 3.684 15 4.478v.113a49.488 49.488 0 0 0-6 0v-.113c0-.794.609-1.428 1.364-1.452Zm-.355 5.945a.75.75 0 1 0-1.5.058l.347 9a.75.75 0 1 0 1.499-.058l-.346-9Zm5.48.058a.75.75 0 1 0-1.498-.058l-.347 9a.75.75 0 0 0 1.5.058l.345-9Z"
-                clipRule="evenodd"
-              />
-            </svg>
-          </button>
+            title="Eliminar"
+          />
         </div>
       </Modal>
 

@@ -12,9 +12,16 @@ interface IProps {
   onRequestClose?: () => void
   onAccept?: () => void
   children: React.ReactNode
+  textAccept?: string
 }
 
-const Modal = ({ visible, onRequestClose, children, onAccept }: IProps) => {
+const Modal = ({
+  visible,
+  onRequestClose,
+  children,
+  onAccept,
+  textAccept = "Aceptar",
+}: IProps) => {
   return (
     <TEModal
       zIndex={9999}
@@ -30,7 +37,7 @@ const Modal = ({ visible, onRequestClose, children, onAccept }: IProps) => {
               <Button mode="alert" onClick={onRequestClose} title="Cancelar" />
             )}
             {onAccept && (
-              <Button mode="primary" onClick={onAccept} title="Aceptar" />
+              <Button mode="primary" onClick={onAccept} title={textAccept} />
             )}
           </TEModalFooter>
         </TEModalContent>

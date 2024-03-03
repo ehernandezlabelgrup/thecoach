@@ -201,7 +201,7 @@ const Calendar = ({
     )
     if (status === 200) {
       if (data?.success) {
-        toast.success("Rest day created")
+        toast.success("Rest day createdo")
         setWorkouts([...workouts, data?.psdata])
       } else {
         toast.error(data?.error)
@@ -245,7 +245,7 @@ const Calendar = ({
       )
       if (status === 200) {
         if (data?.success) {
-          toast.success("Entrenamiento pegado")
+          toast.success("Entrenamiento copiado")
           getData()
         } else {
           toast.error(data?.error)
@@ -310,11 +310,32 @@ const Calendar = ({
     }
   }
 
-  const onDeleteAudio = async (date: string) => {
-    const au = audios.filter((audio) => {
-      return audio.date !== date
+  const onDeleteAudio = async (audio: IAudio) => {
+    const au = audios.filter((item) => {
+      return item.date !== audio.date
     })
     setAudios(au)
+
+    axios.delete(
+      `${URL_BASE}module/thetraktor/program?action=delete_audio&id_program=${id}&id_audio=${audio.id}`,
+    )
+  }
+
+  const updateAudio = async (audio: IAudio) => {
+    const { data, status } = await axios.post(
+      `${URL_BASE}module/thetraktor/program?action=update_audio&id_program=${id}&id_audio=${audio.id}`,
+      {
+        title: audio.title,
+      },
+    )
+    if (status === 200) {
+      if (data?.success) {
+        toast.success("Audio actualizado")
+        setAudios(data?.psdata)
+      } else {
+        toast.error(data?.error)
+      }
+    }
   }
 
   useEffect(() => {
@@ -441,6 +462,7 @@ const Calendar = ({
       <ModalAudio
         onDeleteAudio={onDeleteAudio}
         setSelectAudio={() => setSelectAudio(false)}
+        updateAudio={updateAudio}
         audio={selectedAudio}
       />
     </CalendarContext.Provider>
