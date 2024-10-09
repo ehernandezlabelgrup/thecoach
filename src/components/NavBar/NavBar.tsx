@@ -27,9 +27,11 @@ interface NavBarProps {
  * @param {NavBarProps} props - Component props
  * @returns {React.ReactElement} Rendered NavBar component
  */
-export const NavBar: React.FC<NavBarProps> = ({ loading = false }): React.ReactElement => {
+export const NavBar: React.FC<NavBarProps> = ({
+  loading = false,
+}): React.ReactElement => {
   const { truncate, setTruncate, currentDate, setCurrentDate } = useCalendar();
-  const [currentMonth, setCurrentMonth] = useState<string>(() => 
+  const [currentMonth, setCurrentMonth] = useState<string>(() =>
     dayjs(currentDate).format("MMMM YYYY")
   );
 
@@ -37,23 +39,32 @@ export const NavBar: React.FC<NavBarProps> = ({ loading = false }): React.ReactE
    * Handles date changes based on user actions
    * @param {("today" | "back" | "next")} type - Type of date change
    */
-  const handleDateChange = useCallback((type: "today" | "back" | "next") => {
-    let newDate: Date;
-    switch (type) {
-      case "today":
-        newDate = dayjs().startOf('day').toDate();
-        break;
-      case "back":
-        newDate = dayjs(currentDate).subtract(1, "month").startOf('day').toDate();
-        break;
-      case "next":
-        newDate = dayjs(currentDate).add(1, "month").startOf('day').toDate();
-        break;
-      default:
-        return;
-    }
-    setCurrentDate(newDate);
-  }, [currentDate, setCurrentDate]);
+  const handleDateChange = useCallback(
+    (type: "today" | "back" | "next") => {
+      let newDate: string;
+      switch (type) {
+        case "today":
+          newDate = dayjs().startOf("day").format("YYYY-MM-DD");
+          break;
+        case "back":
+          newDate = dayjs(currentDate)
+            .subtract(1, "month")
+            .startOf("day")
+            .format("YYYY-MM-DD");
+          break;
+        case "next":
+          newDate = dayjs(currentDate)
+            .add(1, "month")
+            .startOf("day")
+            .format("YYYY-MM-DD");
+          break;
+        default:
+          return;
+      }
+      setCurrentDate(newDate);
+    },
+    [currentDate, setCurrentDate]
+  );
 
   // Update current month display when currentDate changes
   useEffect(() => {
@@ -76,8 +87,10 @@ export const NavBar: React.FC<NavBarProps> = ({ loading = false }): React.ReactE
           </button>
           <div className="relative">
             <DatePicker
-              onChange={(date) => date && setCurrentDate(dayjs(date).startOf('day').toDate())}
-              selected={currentDate}
+              onChange={(date) =>
+                date && setCurrentDate(dayjs(date).startOf("day").toDate())
+              }
+              selected={dayjs(currentDate).toDate()}
               customInput={
                 <button className="px-2 py-2 h-[35px] border border-l-0 border-gray-300 rounded-r">
                   <CaretDownIcon />
