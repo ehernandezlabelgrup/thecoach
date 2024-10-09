@@ -1,0 +1,45 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@font-face {
+  font-family: "proxima-nova";
+  font-style: normal;
+  font-weight: 200;
+  src: url("./assets/fonts/ProximaNova-Light-webfont.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "proxima-nova";
+  font-style: normal;
+  font-weight: 400;
+  src: url("./assets/fonts/ProximaNova-Reg-webfont.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "proxima-nova";
+  font-style: normal;
+  font-weight: 600;
+  src: url("./assets/fonts/ProximaNova-Sbold-webfont.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: hongkong;
+  font-style: normal;
+  font-weight: 200;
+  src: url("./assets/fonts/hongkong.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: hongkong;
+  font-style: normal;
+  font-weight: 400;
+  src: url("./assets/fonts/hongkong-medium.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: hongkong;
+  font-style: normal;
+  font-weight: 600;
+  src: url("./assets/fonts/hongkong-bold.woff2") format("woff2");
+}
