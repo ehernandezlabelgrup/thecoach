@@ -6,6 +6,7 @@
  */
 
 import axios from 'axios';
+import { IProgramResponse } from '../interfaces/response';
 
 /**
  * Fetch program data from the API
@@ -20,7 +21,7 @@ export const fetchProgramData = async (
   id_program: string, 
   startDate: string, 
   endDate: string
-): Promise<any> => {
+): Promise<IProgramResponse> => {
   try {
     const response = await axios.get(
       `${base_url}/module/thetraktor/program`, 

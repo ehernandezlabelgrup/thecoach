@@ -19,7 +19,7 @@ customElements.define("the-coach", AppWebComponent);
 function mountApp() {
   const appElement = document.createElement("the-coach");
   document.body.appendChild(appElement);
-  appElement.setAttribute("id_program", "1");
+  appElement.setAttribute("id_program", "3");
   appElement.setAttribute("base_url", "https://thetraktor.com");
 }
 

@@ -16,7 +16,16 @@ export interface CalendarContextType {
   createRestDay: (date: string) => Promise<void>;
   createNewDay: (date: string) => Promise<void>;
   loading: boolean;
-  programData: ProgramSession | null;
+  programData: ProgramSession[] | null;
+  activeDay: IActiveDay | null;
+  activeDayHandler: (date: IActiveDay | null) => void;
+  deleteWorkout: (id: number) => void;
+  getExcercises: (text:string) => void;
+}
+
+export interface IActiveDay {
+    date: string;
+    id_workout: number;
 }
 
 export interface CalendarProviderProps {

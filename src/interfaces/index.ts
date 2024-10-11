@@ -52,7 +52,7 @@ export interface ProgramSession {
   id_workout_category: string;
   date_add: string;
   date_upd: string;
-  exercises: Exercise[];
+  exercises: IExercise[];
   workout_items: WorkoutItem[];
   id: number;
   force_id: boolean;
@@ -101,3 +101,15 @@ export interface Mark {
 }
 
 // Add more interfaces as needed for your application
+
+export interface IExercise {
+    id: number;
+    id_thetraktor_excercise: string;
+    name: string;
+    active: string;
+    active_in_marks: string;
+    date_add: string;
+    date_upd: string;
+    type_mark: string;
+    video?: string;
+  }

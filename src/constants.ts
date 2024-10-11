@@ -14,5 +14,8 @@ export const COOKIE_NAMES = {
     CREATE_REST_DAY: 'create_rest_day',
     CREATE_NEW_DAY: 'create_new_day',
   };
+
+  export const COPIED_WORKOUTS_KEY = 'copiedWorkouts';
+
   
   // TODO: Add more constants as needed for your application

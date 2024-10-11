@@ -4,6 +4,8 @@ import WeeksLabels from "../WeekLabels";
 import { useMemo } from "react";
 import { useCalendar } from "../../context/CalendarContext/CalendarContext";
 import Week from "../Week";
+import { DragDropContext, DropResult } from "@hello-pangea/dnd";
+import { Checkbox } from "@nextui-org/react";
 
 export default function Calendar() {
   const { currentDate } = useCalendar();
@@ -29,6 +31,10 @@ export default function Calendar() {
     return weeksArray;
   }, [currentDate]);
 
+  const onDragEnd = (result: DropResult) => {
+    console.log(result);
+  };
+
   return (
     <div className="h-full w-full bg-[#F8F9FA]">
       <div className="p-4">
@@ -36,11 +42,13 @@ export default function Calendar() {
       </div>
       <div>
         <WeeksLabels />
-        {weeks.map((week, index) => (
-          <div key={index} className="flex">
-            <Week data={week} />
-          </div>
-        ))}
+        <DragDropContext onDragEnd={onDragEnd}>
+          {weeks.map((week, index) => (
+            <div key={index} className="flex">
+              <Week data={week} />
+            </div>
+          ))}
+        </DragDropContext>
       </div>
     </div>
   );

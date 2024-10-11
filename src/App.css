@@ -3,24 +3,24 @@
 @tailwind utilities;
 
 @font-face {
-  font-family: "proxima-nova";
+  font-family: "proximanova";
   font-style: normal;
   font-weight: 200;
   src: url("./assets/fonts/ProximaNova-Light-webfont.woff2") format("woff2");
 }
 
 @font-face {
-  font-family: "proxima-nova";
+  font-family: "proximanova";
   font-style: normal;
   font-weight: 400;
   src: url("./assets/fonts/ProximaNova-Reg-webfont.woff2") format("woff2");
 }
 
 @font-face {
-  font-family: "proxima-nova";
+  font-family: "proximanova";
   font-style: normal;
-  font-weight: 600;
-  src: url("./assets/fonts/ProximaNova-Sbold-webfont.woff2") format("woff2");
+  font-weight: 700;
+  src: url("./assets/fonts/proxima-nova-9.woff") format("woff2");
 }
 
 @font-face {
